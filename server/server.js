@@ -19,12 +19,13 @@ app.use(cors({ origin: true }));
 
 
 // routes
-// app.get("/", (req, res) => {
-//     res.json(['heeloww'])
-//   });
+app.get("/", (req, res) => {
+    res.redirect(301,'/tweezes')
+  });
 app.use('/auths',require('./routes/auths'))
 app.use('/users',require('./routes/users'))
 app.use('/rels',require('./routes/relationships'))
+app.use('/tweezes', require('./routes/tweezes'))
 
 
 

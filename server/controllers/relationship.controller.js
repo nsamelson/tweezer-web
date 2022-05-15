@@ -11,8 +11,8 @@ const auth = getAuth(firebase);
 // get all relationships
 const getRelationships = async ( req,res, next)=>{
 
-    //TODO: add query param to get only the ones a user follows
     try{
+        const query = req.query
         const relsRef = collection(db,'relationships')
         const data = await getDocs(relsRef)
 
@@ -26,7 +26,25 @@ const getRelationships = async ( req,res, next)=>{
                     doc.data().follower_id,
                     doc.data().following_id
                 )
-                relsArray.push(rel)
+                //if filtering by follower_id
+                if (query.follower !== undefined){
+                    const follower = query.follower 
+
+                    if (rel.follower_id == follower){
+                        relsArray.push(rel);
+                        
+                    }
+                }
+                else if (query.following !== undefined){
+                    const following = query.following  
+                                      
+                    if (rel.following_id == following){
+                        relsArray.push(rel);
+                    }
+                }
+                else{
+                    relsArray.push(rel);
+                }
             })
             res.json(relsArray)
         }

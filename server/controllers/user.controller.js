@@ -8,8 +8,15 @@ const User = require('../models/User');
 const db = getFirestore(firebase)
 const auth = getAuth(firebase);
 
-// get a list of all users
+/**
+ * GET method that returns a list of User objects
+ * 
+ * @query
+ *  name : filters the output with the username
+ * 
+ */
 const getUsers = async (req, res, next) => {
+    
     try {
         const query = req.query
         const users = collection(db,'users');
@@ -36,7 +43,7 @@ const getUsers = async (req, res, next) => {
                 );
 
                 //if filtering by user
-                if (query.name !== undefined){
+                if (query.name != undefined){
                     const name = query.name.toLowerCase()
                     
                     // if name inside the username
