@@ -186,7 +186,7 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/BadResponse'
-  /auth/signin:
+  /auths/signin:
     post:
       tags:
         - auths
