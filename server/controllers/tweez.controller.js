@@ -72,7 +72,7 @@ const getTweezes = async (req,res,next)=>{
  * 
  * @body
  * content : content of the tweet  
- * photo : add a photo //TODO://
+ * image : add a photo TODO: implement correctly
  */
 const addTweez = async (req,res,next) => {
     const data = req.body
@@ -103,7 +103,7 @@ const addTweez = async (req,res,next) => {
         const newData = {
             "username": user.username, 
             "created_at":Timestamp.now(), 
-            "image":"",
+            "image":data.image,
             "content":data.content, 
             "likes":0, 
             "profile_picture":user["profile picture"], 

@@ -134,7 +134,7 @@ const getUser = async (req, res, next) => {
     }
 }
 
-//TODO: BEWARE BUY MODIFYING PASSWORD
+//TODO: BEWARE BY MODIFYING PASSWORD
 // TODO: allow to only modify the info below
 /**
  * PUT method that updates the user information
