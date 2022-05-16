@@ -6,7 +6,14 @@ const db = getFirestore(firebase);
 const auth = getAuth(firebase);
 
 
-// Sign up a new account
+/**
+ * POST method to create a new account
+ * 
+ * @body
+ * - email
+ * - password
+ * - username (unique)
+ */
 const signup = async (req, res, next) => {
     const data = req.body;
 
@@ -54,7 +61,13 @@ const signup = async (req, res, next) => {
     
 }
 
-// sign in with an existing user
+/**
+ * POST method to log in the application as an existing user
+ * 
+ * @body
+ * - email
+ * - password
+ */
 const signin = async(req, res,next)=>{
     const data = req.body;
 
@@ -81,6 +94,8 @@ const signin = async(req, res,next)=>{
 //TODO: change password
 
 //TODO: change email (not important)
+
+//TODO: delete user (not important)
 
 
 module.exports = {

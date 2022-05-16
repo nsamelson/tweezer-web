@@ -12,6 +12,8 @@ const auth = getAuth(firebase);
  * GET method that returns a list of Tweez objects
  * 
  * @query
+ * name: filter the tweezes by username  
+ * id: filter the tweezes by the user_id
  * 
  */
 const getTweezes = async (req,res,next)=>{
@@ -122,9 +124,79 @@ const addTweez = async (req,res,next) => {
     }
 }
 
+/**
+ * GET method that returns a specific tweez
+ * 
+ * @params  
+ * id: id of the tweez
+ */
+const getTweez = async (req, res,next) =>{
+    try{
+        const id = req.params.id
+        const tweezRef = doc(db,'tweezes',id)
+        const data = await getDoc(tweezRef)
+
+        if(!data.exists) {
+            res.status(404).json({"message":'user with the given ID not found'});
+        }else {
+            res.json(data.data());
+        }
+    }catch (error) {
+        res.status(400).json({"message": error.message});
+    }
+
+}
+
+/**
+ * PUT method that updates the tweez by id
+ * 
+ * @params   
+ * id: id of the specific tweez
+ */
+ const updateTweez = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const data = req.body;
+
+        const ref = doc(db,'tweezes',id);
+        await updateDoc(ref, data)
+            .then(() => {
+                res.json({"message": "tweez updated"});
+            }).catch((error)=>{
+                res.status(404).json({"message":error.message});
+            })
+    } catch (error) {
+        res.status(400).json({"message": error.message});
+    }
+}
+
+/**
+ * DELETE method that removes a tweez by id
+ * 
+ * @params
+ * id: id of the tweez
+ */
+const deleteTweez = async (req, res,next) =>{
+    try {
+        const id = req.params.id;
+        const ref = doc(db,'tweezes',id)
+        await deleteDoc(ref)
+            .then(() => {
+                res.json({"message": "tweez deleted"});
+            }).catch((error)=>{
+                res.status(404).json({"message":'tweez with the given ID not found'});
+            })
+    } catch (error) {
+        res.status(400).json({"message": error.message});
+    }
+}
+
 
 module.exports = {
     getTweezes,
-    addTweez
+    addTweez,
+    getTweez,
+    updateTweez,
+    deleteTweez
 
 }

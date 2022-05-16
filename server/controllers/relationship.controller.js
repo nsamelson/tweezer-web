@@ -8,7 +8,13 @@ const Relationship = require('../models/Relationship');
 const db = getFirestore(firebase)
 const auth = getAuth(firebase);
 
-// get all relationships
+/**
+ * GET method to return an array of relationships between users
+ * 
+ * @query
+ * - follower: filter with the follower_id
+ * - following: filter with the following_id
+ */
 const getRelationships = async ( req,res, next)=>{
 
     try{
@@ -54,9 +60,17 @@ const getRelationships = async ( req,res, next)=>{
 
 }
 
-// add a relationship between users
+/**
+ * POST method that creates a rel between 2 users
+ * 
+ * @body
+ * - follower_id: the user that follows another
+ * - following_id: the user that is followed
+ */
 const addRelationship = async ( req,res, next) => {
     const data = req.body
+    //TODO: maybe get the current user Id
+    //TODO: does it changes the number of followers for the users?
 
     try{
         const newData = {
@@ -79,7 +93,12 @@ const addRelationship = async ( req,res, next) => {
     }
 }
 
-// get relationship by id
+/**
+ * GET method that returns a single relationship object
+ * 
+ * @params
+ * id: relationship id
+ */
 const getRelationship = async ( req,res, next) =>{
     try{
         const id = req.params.id
@@ -97,7 +116,12 @@ const getRelationship = async ( req,res, next) =>{
     }
 }
 
-// delete relationship
+/**
+ * DELETE method to delete a relatioship
+ * 
+ * @params
+ * id: id of the relation to delete
+ */
 const deleteRelationship = async (req, res, next) => {
     try {
         const id = req.params.id;

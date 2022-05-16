@@ -63,7 +63,14 @@ const getUsers = async (req, res, next) => {
     }
 }
 
-// create a new user
+/**
+ * POST method that creates a new user
+ * 
+ * @body
+ * - username: the username a user chooses (unique)  
+ * - email: email address to connect  
+ * - password: password 
+ */
 const addUser = async (req, res, next) => {
     const data = req.body;
     var id 
@@ -105,8 +112,13 @@ const addUser = async (req, res, next) => {
     }
 }
 
-// get a specific user by id
 //TODO: put in a User object
+/**
+ * GET method that returns a single user with the id
+ * 
+ * @params
+ * id: id of the user
+ */
 const getUser = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -122,8 +134,20 @@ const getUser = async (req, res, next) => {
     }
 }
 
-// update a specific user 
 //TODO: BEWARE BUY MODIFYING PASSWORD
+// TODO: allow to only modify the info below
+/**
+ * PUT method that updates the user information
+ * 
+ * @params
+ * id: user id
+ * 
+ * @body
+ * - bio: the bio of the user
+ * - profile_cover
+ * - profile_picture
+ * 
+ */
 const updateUser = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -141,12 +165,19 @@ const updateUser = async (req, res, next) => {
     }
 }
 
-// delete a specific user 
 //TODO: DELETE ALL LINKS plus get from the redirect of auth
+/**
+ * DELETE method to delete a user  
+ * DO NOT USE
+ * 
+ * @params
+ * id: user id
+ */
 const deleteUser = async (req, res, next) => {
     try {
         const id = req.params.id;
         const user = doc(db,'users',id)
+        await deleteDoc(user)
             .then(() => {
                 res.json({"message": "user deleted"});
             }).catch((error)=>{

@@ -1,0 +1,627 @@
+openapi: '3.0.2'
+info:
+  title: Tweezer
+  version: '1.0'
+  description: API of the server for the application `Tweezer-web`
+servers:
+  - url: http://localhost:3000
+paths:
+  
+  # USERS
+  /users:
+    get:
+      tags:
+        - users
+      summary: List all the users
+      parameters:
+        - in: query
+          name: name
+          description: Query parameter to filter by name
+          schema:
+            type: string
+            example: pedro
+      responses:
+        '200':
+          description: A JSON array of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                $ref: '#/components/schemas/Users'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    post:
+      tags:
+        - users
+      summary: Creates a new user (DO NOT USE)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Auth'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get a specific user with the id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    put:
+      tags:
+        - users
+      summary: update a user information
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                bio:
+                  type: string
+                  example: "hello good people"
+                profile_cover:
+                  type: string
+                  example: ""
+                profile_picture:
+                  type: string
+                  example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fblank-profile-picture-973460_1280.webp?alt=media&token=ee3911d9-d138-4b6c-8b0e-32e157da82b6
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    delete:
+      tags:
+        - users
+      summary: delete a user by id (DO NOT USE)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+
+  # AUTHS REQUESTS
+  /auths/signup:
+    post:
+      tags:
+        - auths
+      summary: Sign up a new user and logs in
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Auth'
+              
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+  /auth/signin:
+    post:
+      tags:
+        - auths
+      summary: Logs in with an existing user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:  
+                  type: string
+                  example: nico@n.com
+                password:
+                  type: string
+                  example: nico123              
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+  # TWEEZES
+  /tweezes:
+    
+    get:
+      tags:
+        - tweezes
+      summary: List all the tweezes
+      parameters:
+        - in: query
+          name: name
+          description: Query parameter to filter by name
+          schema:
+            type: string
+            example: pedro
+        - in: query
+          name: id
+          description: Query parameter to filter by user_id
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+      responses:
+        '200':
+          description: A JSON array of users
+          content:
+            application/json:
+              schema: 
+                type: array
+                $ref: '#/components/schemas/Tweezes'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    post:
+      tags:
+        - tweezes
+      summary: Creates a new tweez
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content: 
+                  type: string
+                  example: what a beautiful day!
+                image: 
+                  type: string
+                  example: ""
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+  /tweezes/{id}:
+    get:
+      tags:
+        - tweezes
+      summary: Get a specific tweez with the id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: 06qkF8pnJ2NAOB3h7aFH
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Tweez'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    put:
+      tags:
+        - tweezes
+      summary: update a tweez information
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: 06qkF8pnJ2NAOB3h7aFH
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Tweez'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    delete: 
+      tags:
+        - tweezes
+      summary: delete a tweez by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: 06qkF8pnJ2NAOB3h7aFH
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+
+
+  # RELATIONSHIPS
+  /rels:
+    get:
+      tags:
+        - relationships
+      summary: List all the Relationships
+      parameters:
+        - in: query
+          name: follower
+          description: Query parameter to filter by follower_id
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+        - in: query
+          name: following
+          description: Query parameter to filter by following_id
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+      responses:
+        '200':
+          description: A JSON array of Relationships
+          content:
+            application/json:
+              schema: 
+                type: array
+                $ref: '#/components/schemas/Relationships'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    post:
+      tags:
+        - relationships
+      summary: Creates a new Relationship
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                follower_id:
+                  type: string
+                  example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+                following_id:
+                  type: string
+                  example: EEZue0YRiiRCqAZAV3CBIFECvNA3
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+  /rels/{id}:
+    get:
+      tags:
+        - relationships
+      summary: Get a specific Relationship with the id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: I8Y9ec4Kzhg2IOKIUb5o
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Relationship'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+    delete:
+      tags:
+        - relationships
+      summary: delete a Relationship by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+            example: I8Y9ec4Kzhg2IOKIUb5o
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/GoodResponse'
+        '400':
+          description: Not OK
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/BadResponse'
+
+# COMPONENTS
+components:
+  schemas:
+
+    Auth:
+      description: User body to signup and create a user
+      properties:
+        email:  
+          type: string
+          example: generalkenobi@gmail.com
+        username:
+          type: string
+          example: GeneralKenobi
+        password:
+          type: string
+          example: kenobi123
+
+    GoodResponse:
+      description: A good response
+      properties:
+        message: 
+          type: string
+          example: Operation done
+
+    BadResponse:
+      description: A bad response
+      properties:
+        message: 
+          type: string
+          example: Operation not done
+    User:
+      description: Model containing user info
+      properties:
+        id:
+          type: string
+          example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+        username:
+          type: string
+          example: GeneralKenobi
+        bio:
+          type: string
+          example: Hello there!
+        email:
+          type: string
+          example: generalkenobi@gmail.com
+        followers:
+          type: integer
+          example: 69
+        following:
+          type: integer
+          example: 420
+        password:
+          type: string
+          example: kenobi123
+        profile_cover:
+          type: string
+          example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20covers%2Fdefault-cover.webp?alt=media&token=c1611beb-78b3-4914-824b-d566995a91c2
+        profile_picture:
+          type: string
+          example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fblank-profile-picture-973460_1280.webp?alt=media&token=ee3911d9-d138-4b6c-8b0e-32e157da82b6
+        search_history:
+          type: array
+          items:
+            type: string
+            example: "pedro"
+        tweezes:
+          type: integer
+          example: 1234
+    Users:
+      description: Array containing multiple User objects
+      items:
+        type: object
+        $ref: '#/components/schemas/User'
+    
+    Tweez:
+      description: Model containing tweez info
+      properties:
+        id:
+          type: string
+          example: 06qkF8pnJ2NAOB3h7aFH
+        username:
+          type: string
+          example: GeneralKenobi
+        created_at:
+          type: object
+          properties:
+            seconds: 
+              type: integer
+              example: 1650794400
+            nanoseconds:
+              type: integer
+              example: 0
+        image:
+          type: string
+          example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/tweezes%2FIMG_20220406_200546.jpg?alt=media&token=ffebb4d6-3428-4e13-a33c-15934ba8ac50
+        content:
+          type: string
+          example: What a beautiful sunset!
+        likes:
+          type: integer
+          example: 12
+        profile_picture:
+          type: string
+          example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fblank-profile-picture-973460_1280.webp?alt=media&token=ee3911d9-d138-4b6c-8b0e-32e157da82b6
+        user_id:
+          type: string
+          example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+    Tweezes:
+      description: Array containing multiple Tweez objects
+      items:
+        type: object
+        $ref: '#/components/schemas/Tweez'
+
+    Relationship:
+      description: Model containing tweez info
+      properties:
+        id:
+          type: string
+          example: I8Y9ec4Kzhg2IOKIUb5o
+        follower_id:
+          type: string
+          example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+        following_id:
+          type: string
+          example: EEZue0YRiiRCqAZAV3CBIFECvNA3
+    Relationships:
+      description: Array containing multiple Relationships objects
+      items:
+        type: object
+        $ref: '#/components/schemas/Relationship'
+        
