@@ -1,20 +1,117 @@
 
-.example-list {
-    width: 100px;
-    border: solid 1px #ccc;
-    border-radius: 5px;
-    background: #fff;
-    text-align: center;
-    padding: 10px;
-    margin: 0;
-  }
+/* ================== MAIN ============================= */
+
+.container {
+  display: flex;
+  overflow-y: hidden;
+  /* height: 100%; */
+
+  /* justify-content: center; */
+  align-items: top;
+  /* border: 3px solid green;  */
+}
+
+
+/* ====================== LEFT MENU ======================  */
+.left-menu{
+  /* position: fixed; */
+  overflow: hidden;
+  /* overflow-x: hidden;
+  overflow-y: hidden; */
+  height: 100%;
+
+  display: flex;
+  flex: 1 1 20%;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+
   
-  .example-list > li {
-    list-style-type: none;
-    border-bottom: solid 1px #8b8b8b;
-    padding: 8px 0;
-  }
+  /* overflow-y: scroll; */
   
-  .example-list > li:last-child {
-    border-bottom: none;
-  }
+
+
+  background-color: rgba(78, 193, 255, 0.24);
+  border-radius: 15px;
+  padding: 10px;
+  opacity: 1;
+
+  
+  
+}
+
+.buttons{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  /* justify-content: center; */
+  align-items: start;
+  padding-left: 15%;
+}
+
+.big-button{
+  /* flex-wrap: wrap; */
+  margin-top: 5%;
+  width: 80%;
+  border-radius: 15px;
+  /* justify-content: center; */
+}
+
+/* ================= CENTER =======================*/
+.main{
+  flex: 1 1 60%;
+  padding-right: 5%;
+  padding-left: 5%;
+
+  height: 920px;
+  
+  /* border: solid ; */
+  /* flex-wrap: wrap; */
+
+  /* width: 10%; */
+  /* position: absolute; */
+  /* top: 50%; */
+  /* left: 50%; */
+  /* margin-right: -50%; */
+  /* transform: translate(-50%, -50%); */
+}
+
+/* ==================== RIGHT====================== */
+.right-menu {
+  /* overflow-y: hidden; */
+  height: 100%;
+  
+  /* display: flex; */
+  flex: 1 1 20%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* padding-left: 50%; */
+  
+  background-color: rgba(78, 193, 255, 0.24);
+  border-radius: 15px;
+  padding: 10px;
+  opacity: 1;
+  
+}
+
+.search-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.search-full-width {
+  width: 100%;
+}
+
+/* .round{
+  border-radius: 12px;
+} */
+::ng-deep .mat-form-field-outline-end {
+  border-radius: 0 28px 28px 0 !important;
+}
+::ng-deep .mat-form-field-outline-start {
+  border-radius: 28px 0 0 28px !important;
+  min-width: 28px !important;
+}

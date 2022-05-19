@@ -1,15 +1,89 @@
-<h1>{{title}}</h1>
 
-<!-- <button (click)="isOpen = !isOpen" cdkOverlayOrigin #trigger="cdkOverlayOrigin">
-  Open/close overlay
-</button><div>This content will be under the overlay</div><ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen">
-  <ul class="example-overlay">
-     <li>Item 1</li>
-     <li>Item 2</li>
-     <li>Item 3</li>
-  </ul>
-</ng-template> -->
 
-<div id=main>
-  <router-outlet></router-outlet>
+
+<div class="container">
+
+  <!-- Left menu with all buttons -->
+  <div class="left-menu">
+
+    <h1>Tweezer</h1>
+
+    <div class="buttons">
+      <button mat-button color="secondary" class="button" (click)="goToHome()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+        Home
+      </button>
+  
+      <button mat-button color="secondary" class="button" (click)="goToProfile()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">person</mat-icon>
+        Profile
+      </button>
+  
+      <button mat-button color="secondary" class="button" (click)="goToLogin()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">logout</mat-icon>
+        Log out
+      </button>
+      
+      
+      
+    </div>
+    <ol>
+      <li>
+        <button mat-raised-button (click)="openDialog()">Pick one</button>
+      </li>
+      <li *ngIf="animal">
+        You chose: <i>{{animal}}</i>
+      </li>
+    </ol>
+    
+    <button class="big-button" mat-flat-button color="primary">
+      Tweez!
+    </button>
+    
+    
+
+    
+    
+
+  </div>
+
+  <!-- Central page changing -->
+  <div class="main">
+    <router-outlet></router-outlet>
+  </div>
+
+
+  <!-- Right menu with search bar and result list -->
+  <div class="right-menu">
+
+
+    <form class="search-form">
+
+      <mat-form-field class="search-full-width" appearance="outline" >
+        <mat-label>Search a user</mat-label>
+        <span matPrefix><mat-icon aria-hidden="false" aria-label="search icon">search</mat-icon></span>
+        <input type="text"
+               placeholder="Eel on Musk"
+               aria-label="Search"
+               matInput
+               [formControl]="myControl"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+        
+      </mat-form-field>
+    </form>
+    
+    
+
+    
+    
+  
+  </div>
+
+
 </div>
+

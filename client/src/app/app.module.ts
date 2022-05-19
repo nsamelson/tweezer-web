@@ -28,8 +28,10 @@ import { MatRadioModule } from '@angular/material/radio';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { ProfileComponent } from './profile/profile.component';
-
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatCardModule } from '@angular/material/card';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { OverlayModule } from '@angular/cdk/overlay';
 // import { OverlayRef, Overlay } from '@angular/cdk/overlay';
@@ -54,6 +56,10 @@ import { OverlayModule } from '@angular/cdk/overlay';
     MatButtonModule,
     MatSidenavModule,
     MatToolbarModule,
+    MatAutocompleteModule,
+    MatCardModule,
+    MatListModule,
+    MatDialogModule,
   ],
   exports: [
 

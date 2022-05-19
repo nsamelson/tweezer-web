@@ -1,1 +1,97 @@
-<p>profile works!</p>
+<mat-toolbar class="toolbar">
+    
+    <button mat-button color="secondary" class="button" (click)="goToHome()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_back</mat-icon>
+      </button>
+    <span>Profile name</span>
+
+
+</mat-toolbar>
+
+<div class="content">
+
+    <!-- divider between user profile and tweezes -->
+    <mat-list>
+        <!-- User profile -->
+        <mat-card class="profile-card" >
+
+            <div class="img-container">
+
+                <img class="background-img" mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                <div class="overlay">
+                    <img class="profile" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
+                </div>
+            </div>
+            
+            
+            <mat-card-header>
+                <mat-card-title>User profile</mat-card-title>
+
+                <span class="spacer"></span>
+                <div class="edit-button">
+                    <button mat-flat-button color="primary" class="button"> 
+                        <mat-icon aria-hidden="false" aria-label="Example home icon">edit</mat-icon>
+                        Edit
+                    </button>
+                </div>
+            </mat-card-header>
+            
+            <mat-card-content>
+                <p>
+                This is the bio of the user
+                </p>
+                
+            </mat-card-content>
+            <mat-divider ></mat-divider>
+            <mat-card-actions>
+                <!-- if other user than itself -->
+                <!-- 0 or one of them will be displayed -->
+                <div class="folowing-buttons">
+                    <button mat-stroked-button color="primary">Follow</button>
+                    <button mat-raised-button color="primary">Unfollow</button>
+                </div>
+                <!-- if itself -->
+                <div>
+                    0 followers 8 following
+                </div>
+
+                
+                
+                
+            </mat-card-actions>
+        </mat-card>
+              
+        <!-- divider -->
+        <mat-divider class="divider"></mat-divider>
+
+        <!-- tweezes -->
+        <mat-card class="example-card" *ngFor="let i of cards">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image">
+                <img class="avatar" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
+              </div>
+              <mat-card-title>Shiba Inu</mat-card-title>
+              <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <p>
+                  The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                  A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                  bred for hunting.
+                </p>
+              </mat-card-content>
+            <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+            
+            <mat-card-actions>
+              <button mat-button color="secondary" class="button"> 
+                <mat-icon aria-hidden="false" aria-label="Example home icon">favorite</mat-icon>
+              </button>
+              <button mat-button color="secondary" class="button"> 
+                <mat-icon aria-hidden="false" aria-label="Example home icon">share</mat-icon>
+              </button>
+            </mat-card-actions>
+        </mat-card>
+        
+    </mat-list>
+      
+</div>
