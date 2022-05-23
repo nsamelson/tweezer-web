@@ -41,8 +41,29 @@ export class LoginComponent implements OnInit {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
-  signup(){
-    console.log("signin")
+  signup(): Promise<void>{
+    console.log("signin up")
+    const url = 'http://localhost:3000/auths/signup';
+    const params = {};
+    const headers = {"Content-Type": "application/json",'accept': 'application/json'};
+    const data = JSON.stringify({
+      email: this.email,
+      password: this.password,
+      username: this.username,
+    }, this.getCircularReplacer())
+
+    return new Promise((resolve, reject)=>{
+
+      this.http.post(url,{params,headers, data})
+        .subscribe((response) => {
+          this.zone.run(() =>{
+            this.router.navigate(['/home'])
+            
+
+          })
+          
+        })
+    })
   }
 
   signin(): Promise<void>{

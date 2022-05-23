@@ -14,6 +14,7 @@ app.use(bodyParser.json());
 // allow urls
 const allowedOrigins = [
   'capacitor://localhost',
+  'swagger://localhost',
   'ionic://localhost',
   'http://localhost',
   'http://localhost:8080',

@@ -6,7 +6,7 @@
   <!-- Left menu with all buttons -->
   <div class="left-menu"  *ngIf="!hasRoute('login')">
 
-    <h1>Tweezer {{router_url}}</h1>
+    <h1>Tweezer</h1>
 
     <div class="buttons">
       <button mat-button color="secondary" class="button" (click)="goToHome()"> 
@@ -39,25 +39,27 @@
   <div class="main">
 
       <!-- if in home -->
-    <mat-toolbar class="toolbar" *ngIf="isHome">  
-      <button mat-button color="secondary" class="button"> 
-          <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-          Home
-        </button>
+    <mat-toolbar class="toolbar" *ngIf="hasRoute('home')">  
+      <button mat-button color="secondary" class="button" (click)="goToHome()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+        Home
+      </button>
   
       <span class="spacer"></span>
-  
-      <img class="avatar" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
-  
+
+      <button mat-button color="secondary" (click)="goToProfile()"> 
+        <img class="avatar" src="{{user['profile picture']}}" *ngIf="user !== undefined">
+      </button>
+          
   </mat-toolbar>
 
   <!-- if in profile -->
-  <mat-toolbar class="toolbar" *ngIf="isProfile">
+  <mat-toolbar class="toolbar" *ngIf="hasRoute('profile')">
     
     <button mat-button color="secondary" class="button" (click)="goToHome()"> 
         <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_back</mat-icon>
       </button>
-    <span>Profile name</span>
+    <span *ngIf="user !== undefined">{{user.username}}</span>
 
 
   </mat-toolbar>

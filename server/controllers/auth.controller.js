@@ -1,6 +1,6 @@
 const firebase = require('../firebase/firebase.connect');
 const { getFirestore, collection, getDocs, doc, setDoc} = require('firebase/firestore/lite')
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = require('firebase/auth')
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,  } = require('firebase/auth')
 
 const db = getFirestore(firebase);
 const auth = getAuth(firebase);
@@ -15,11 +15,24 @@ const auth = getAuth(firebase);
  * - username (unique)
  */
 const signup = async (req, res, next) => {
-    const data = req.body;
+    // const data = req.body;
 
-    email = data.email
-    password = data.password
-    username = data.username
+    try {
+        var data = JSON.parse(req.body.data);
+        email = data.email.value
+        password = data.password.value
+        username = data.username.value
+    }catch {
+        var data = req.body;
+        email = data.email
+        password = data.password
+        username = data.username
+    }
+    // console.log(username,)
+
+    // email = data.email
+    // password = data.password
+    // username = data.username
     const id = username
     const usernamesArray = []
 
@@ -101,6 +114,18 @@ const signin = async(req, res,next)=>{
     
 }
 
+const getCurrentUser = async (req,res,next)=>{
+    var user = auth.currentUser;
+
+    if (user) {
+
+        res.redirect('/users/'+user.uid)
+    } else {
+
+        res.json({"message": "user not connected"})
+    }
+}
+
 //TODO: change password
 
 //TODO: change email (not important)
@@ -110,5 +135,6 @@ const signin = async(req, res,next)=>{
 
 module.exports = {
     signup,
-    signin
+    signin,
+    getCurrentUser
 }

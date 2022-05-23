@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
 
   }
 
-  cards = [1,2]
 
   ngOnInit(): void {
   }

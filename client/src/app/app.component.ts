@@ -2,9 +2,10 @@ import { Component, Inject, OnInit, Input} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { BehaviorSubject } from 'rxjs';
 
 export interface DialogData {
   content: string;
@@ -22,32 +23,68 @@ export class AppComponent implements OnInit{
 
   router_url: string;
 
-  isHome: boolean ;
-  isLogin: boolean ;
-  isProfile: boolean ;
-
   content!: string;
   picture!: string;
 
+  user: any;
 
-  constructor(private router:Router, public dialog: MatDialog) {
-    this.isHome = false;
-    this.isLogin = true;
-    this.isProfile = false;
+  options: string[] =[];
 
+
+  constructor(
+    private route: ActivatedRoute,
+    private router:Router, 
+    public dialog: MatDialog, 
+    private http: HttpClient,) {
+
+    // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router_url = router.url;
-  }
 
-  // ============= SEARCH HISTORY + FILTER =============
-  myControl = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions!: Observable<string[]>;
+    this.getCurrentUser()
 
-  ngOnInit() {
+    // this.options = this.user["search history"]
+    
+    
     this.filteredOptions = this.myControl.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
+    
+    // console.log(this.user)
+  }
+
+  //============== Get the current user =================
+  getCurrentUser(): Promise<void>{
+    const url = 'http://localhost:3000/auths/user';
+    const params = {};
+    const headers = {};
+
+
+    return new Promise((resolve, reject)=>{
+
+      this.http.get(url,{params,headers})
+        .subscribe((response) => {
+          this.user = response;
+          // console.log(response)
+          if (this.user["id"]){
+            // console.log(this.user)
+            this.options = this.user["search history"]
+            this.goToHome()
+          }else{
+            this.goToLogin()
+          }
+          
+        })
+    })
+  }
+
+  // ============= SEARCH HISTORY + FILTER =============
+  myControl = new FormControl();
+  
+  filteredOptions!: Observable<string[]>;
+
+  ngOnInit() {
+    // console.log("init")
   }
 
   private _filter(value: string): string[] {
@@ -77,23 +114,25 @@ export class AppComponent implements OnInit{
 
   goToHome(){
     console.log("home")
-    this.isHome = true;
-    this.isLogin = false;
-    this.isProfile = false;
+    // this.isHome = true;
+    // this.isLogin = false;
+    // this.isProfile = false;
     this.router.navigate(['/home'])
   }
 
   goToLogin(){
-    this.isHome = false;
-    this.isLogin = true;
-    this.isProfile = false;
+    // this.isHome = false;
+    // this.isLogin = true;
+    // this.isProfile = false;
     this.router.navigate(['/login'])
+    // this.user = {}
   }
 
   goToProfile(){
-    this.isHome = false;
-    this.isLogin = false;
-    this.isProfile = true;
+    console.log("clicked")
+    // this.isHome = false;
+    // this.isLogin = false;
+    // this.isProfile = true;
     this.router.navigate(['/profile'])
   }
 
@@ -104,7 +143,7 @@ export class AppComponent implements OnInit{
    * @returns
    * @memberof MyComponent
    */
-   hasRoute(route: string) {
+  hasRoute(route: string) {
     return this.router.url.includes(route);
   }
 

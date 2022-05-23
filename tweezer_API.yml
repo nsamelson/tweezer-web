@@ -219,6 +219,20 @@ paths:
               schema:
                 type: object
                 $ref: '#/components/schemas/BadResponse'
+
+  /auths/user:
+    get:
+      tags:
+        - auths
+      summary: Return currently connected user
+      responses:
+        "200":
+          description: a JSON object of user
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/User'
   # TWEEZES
   /tweezes:
     

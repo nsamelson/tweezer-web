@@ -12,8 +12,8 @@
             <p class="tweez-text">
               {{element.content}}
             </p>
-            <div class="picture">
-              <img mat-card-image src="{{element.image}}" *ngIf="element.image!=''">
+            <div class="picture" *ngIf="element.image!=''">
+              <img mat-card-image src="{{element.image}}" >
             </div>
             
         </mat-card-content>

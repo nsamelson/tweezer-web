@@ -72,7 +72,18 @@ const getUsers = async (req, res, next) => {
  * - password: password 
  */
 const addUser = async (req, res, next) => {
-    const data = req.body;
+    try {
+        var data = JSON.parse(req.body.data);
+        email = data.email.value
+        password = data.password.value
+        username = data.username.value
+    }catch {
+        var data = req.body;
+        email = data.email
+        password = data.password
+        username = data.username
+    }
+    // const data = req.body;
     var id 
 
     // get id of new user created in the auth section
@@ -86,9 +97,9 @@ const addUser = async (req, res, next) => {
     // create user doc
     try {
         const newData = {
-            "username": data.username,
-            "email": data.email,
-            "password": data.password,
+            "username": username,
+            "email": email,
+            "password": password,
             "bio": "",
             "followers":0,
             "following":0,
