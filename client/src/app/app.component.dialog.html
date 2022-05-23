@@ -1,0 +1,22 @@
+<h2 mat-dialog-title>
+  Post something
+</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field  class="form" appearance="standard">
+    <mat-label>What's happening...</mat-label>
+    <textarea   
+      matInput
+      cdkTextareaAutosize
+      cdkAutosizeMinRows="4"
+      cdkAutosizeMaxRows="4"
+      type="text"
+      [(ngModel)]="data.content">
+    </textarea>
+    <!-- <mat-text-area></mat-text-area> -->
+  </mat-form-field>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Post</button>
+</mat-dialog-actions>

@@ -69,10 +69,20 @@ const signup = async (req, res, next) => {
  * - password
  */
 const signin = async(req, res,next)=>{
-    const data = req.body;
+    // const data = req.body;
+    try {
+        var data = JSON.parse(req.body.data);
+        email = data.email.value
+        password = data.password.value
+    }catch {
+        var data = req.body;
+        email = data.email
+        password = data.password
+    }
+    
 
-    email = data.email
-    password = data.password
+    // console.log(data)
+    // console.log(password)
     
     try{
         signInWithEmailAndPassword(auth, email, password)

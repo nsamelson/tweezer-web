@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 // 
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent, AppComponentDialog } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
@@ -43,7 +43,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
     AppComponent,
     HomeComponent,
     LoginComponent,
-    ProfileComponent
+    ProfileComponent,
+    AppComponentDialog
   ],
   imports: [
     BrowserModule,
@@ -60,11 +61,13 @@ import { OverlayModule } from '@angular/cdk/overlay';
     MatCardModule,
     MatListModule,
     MatDialogModule,
+    HttpClientModule
   ],
   exports: [
 
   ],
   providers: [],
+  // entryComponents: [AppComponentDialog],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

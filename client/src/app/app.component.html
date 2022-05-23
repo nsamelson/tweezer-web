@@ -4,9 +4,9 @@
 <div class="container">
 
   <!-- Left menu with all buttons -->
-  <div class="left-menu">
+  <div class="left-menu"  *ngIf="!hasRoute('login')">
 
-    <h1>Tweezer</h1>
+    <h1>Tweezer {{router_url}}</h1>
 
     <div class="buttons">
       <button mat-button color="secondary" class="button" (click)="goToHome()"> 
@@ -22,39 +22,56 @@
       <button mat-button color="secondary" class="button" (click)="goToLogin()"> 
         <mat-icon aria-hidden="false" aria-label="Example home icon">logout</mat-icon>
         Log out
-      </button>
-      
-      
-      
+      </button>      
     </div>
-    <ol>
-      <li>
-        <button mat-raised-button (click)="openDialog()">Pick one</button>
-      </li>
-      <li *ngIf="animal">
-        You chose: <i>{{animal}}</i>
-      </li>
-    </ol>
-    
-    <button class="big-button" mat-flat-button color="primary">
-      Tweez!
-    </button>
-    
-    
 
     
+    <button class="big-button" mat-flat-button color="primary" (click)="openDialog()">
+      Tweez!
+    </button>
+
+  
     
 
   </div>
 
   <!-- Central page changing -->
   <div class="main">
-    <router-outlet></router-outlet>
+
+      <!-- if in home -->
+    <mat-toolbar class="toolbar" *ngIf="isHome">  
+      <button mat-button color="secondary" class="button"> 
+          <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+          Home
+        </button>
+  
+      <span class="spacer"></span>
+  
+      <img class="avatar" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
+  
+  </mat-toolbar>
+
+  <!-- if in profile -->
+  <mat-toolbar class="toolbar" *ngIf="isProfile">
+    
+    <button mat-button color="secondary" class="button" (click)="goToHome()"> 
+        <mat-icon aria-hidden="false" aria-label="Example home icon">arrow_back</mat-icon>
+      </button>
+    <span>Profile name</span>
+
+
+  </mat-toolbar>
+  
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+
+    
   </div>
 
 
   <!-- Right menu with search bar and result list -->
-  <div class="right-menu">
+  <div class="right-menu"  *ngIf="!hasRoute('login')">
 
 
     <form class="search-form">
@@ -86,4 +103,7 @@
 
 
 </div>
+
+
+
 

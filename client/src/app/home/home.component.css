@@ -1,8 +1,8 @@
 .content{
     width: 100%;
-    height: 90%;
-    overflow-x: hidden;
-    overflow-y: auto;
+    /* height: 40%; */
+    /* overflow-x: hidden; */
+    overflow-y: scroll;
     text-align:justify;
 
     padding-right: 10px;
@@ -21,4 +21,25 @@
   }
 .spacer{
     flex: 1 1 auto;
+}
+
+img{
+    /* max-height: 400px; */
+    width: 100%; 
+    height: 100%;
+    /* object-fit: scale-down; */
+    overflow: hidden;
+    /* padding-top: 10px; */
+    
+}
+
+.card{
+    margin: 1px;
+    
+}
+.picture{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
 }

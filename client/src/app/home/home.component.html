@@ -1,42 +1,38 @@
-<mat-toolbar class="toolbar">
-    <!-- <span>Home</span> -->
-
-    <button mat-button color="secondary" class="button"> 
-        <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-        Home
-      </button>
-
-    <span class="spacer"></span>
-
-    <img class="avatar" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
-
-  </mat-toolbar>
-  
-
-
 <div class="content">
 
-    <mat-card class="example-card" *ngFor="let i of cards">
+    <mat-card class="card" *ngFor="let element of Tweezes">
         <mat-card-header>
-          <div mat-card-avatar class="example-header-image">
-            <img class="avatar" src="https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fernest.jpg?alt=media&token=b9360a98-5a5a-4c2b-8c63-1ed1d6916c43" alt="Avatar"> 
-          </div>
-          <mat-card-title>Shiba Inu</mat-card-title>
-          <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+            <div mat-card-avatar class="example-header-image">
+              <img class="avatar" src="{{element.profile_picture}}" alt="Avatar"> 
+            </div>
+          <mat-card-title>{{element.username}}</mat-card-title>
+          <mat-card-subtitle> {{element.created_at.seconds * 1000 | date:'dd-MM-yyyy, hh:mm' }} </mat-card-subtitle>
         </mat-card-header>
         <mat-card-content>
-            <p>
-              The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-              A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-              bred for hunting.
+            <p class="tweez-text">
+              {{element.content}}
             </p>
-          </mat-card-content>
-        <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+            <div class="picture">
+              <img mat-card-image src="{{element.image}}" *ngIf="element.image!=''">
+            </div>
+            
+        </mat-card-content>
+        
         
         <mat-card-actions>
-          <button mat-button color="secondary" class="button"> 
-            <mat-icon aria-hidden="false" aria-label="Example home icon">favorite</mat-icon>
-          </button>
+
+            <button mat-button color="primary" class="button" *ngIf="element.user_liked.includes(username); else notLiked"> 
+              <mat-icon aria-hidden="false" aria-label="Example home icon">favorite</mat-icon>
+              {{element.likes}}
+            </button>
+          
+          <ng-template #notLiked>
+            <button mat-button color="secondary" class="button"> 
+              <mat-icon aria-hidden="false" aria-label="Example home icon">favorite_border</mat-icon>
+              {{element.likes}}
+            </button>
+          </ng-template>
+          
           <button mat-button color="secondary" class="button"> 
             <mat-icon aria-hidden="false" aria-label="Example home icon">share</mat-icon>
           </button>
