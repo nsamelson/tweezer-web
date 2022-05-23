@@ -34,6 +34,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import { OverlayModule } from '@angular/cdk/overlay';
+import { UserService } from './user.service';
 // import { OverlayRef, Overlay } from '@angular/cdk/overlay';
 // import {MatFormFieldModule} from '@angular/material/form-field';  
 
@@ -44,7 +45,8 @@ import { OverlayModule } from '@angular/cdk/overlay';
     HomeComponent,
     LoginComponent,
     ProfileComponent,
-    AppComponentDialog
+    AppComponentDialog,
+    
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,7 @@ import { OverlayModule } from '@angular/cdk/overlay';
   exports: [
 
   ],
-  providers: [],
+  providers: [UserService],
   // entryComponents: [AppComponentDialog],
   bootstrap: [AppComponent]
 })

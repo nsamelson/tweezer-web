@@ -2,6 +2,7 @@ import { Component, NgZone, OnInit, Input, EventEmitter, Output } from '@angular
 import { FormControl, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { UserService } from '../user.service';
 
 @Component({
   selector: 'app-login',
@@ -10,13 +11,13 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  
 
   
   constructor(
     private http: HttpClient,
     private router: Router,
-    private zone: NgZone,) {
+    private zone: NgZone,
+    private userService: UserService) {
       
   }
 
@@ -57,6 +58,8 @@ export class LoginComponent implements OnInit {
       this.http.post(url,{params,headers, data})
         .subscribe((response) => {
           this.zone.run(() =>{
+
+            this.getCurrentUser()
             this.router.navigate(['/home'])
             
 
@@ -81,10 +84,32 @@ export class LoginComponent implements OnInit {
       this.http.post(url,{params,headers, data})
         .subscribe((response) => {
           this.zone.run(() =>{
+            
+            this.getCurrentUser()
             this.router.navigate(['/home'])
             
-
+            
+            // this.userService.userDetail.next({"hello":"there"});
           })
+          
+        })
+    })
+  }
+
+  // get user info after connecting with a new account
+  getCurrentUser(): Promise<void>{
+    const url = 'http://localhost:3000/auths/user';
+    const params = {};
+    const headers = {};
+
+
+    return new Promise((resolve, reject)=>{
+
+      this.http.get(url,{params,headers})
+        .subscribe((response) => {
+          // TODO: optimize this func and get user inf directly after signin
+          this.userService.userDetail.next(response);
+          // console.log(response)
           
         })
     })

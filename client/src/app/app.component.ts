@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
+import { UserService } from './user.service';
 
 export interface DialogData {
   content: string;
@@ -30,12 +31,23 @@ export class AppComponent implements OnInit{
 
   options: string[] =[];
 
+  // userDetail:any;
+
 
   constructor(
     private route: ActivatedRoute,
     private router:Router, 
     public dialog: MatDialog, 
-    private http: HttpClient,) {
+    private http: HttpClient,
+    private userService: UserService) {
+
+
+    // automatically update data
+    this.userService.userDetail.subscribe( value => {
+      this.user = value;
+      console.log( value)
+    });
+
 
     // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router_url = router.url;
