@@ -24,8 +24,8 @@ export class AppComponent implements OnInit{
 
   router_url: string;
 
-  content!: string;
-  picture!: string;
+  // content!: string;
+  // picture!: string;
 
   user: any;
 
@@ -111,18 +111,33 @@ export class AppComponent implements OnInit{
     const dialogRef = this.dialog.open(AppComponentDialog,
       {
         width: '30vw',
-        height: '30vh',
-        data: {content: this.content, picture: this.picture}
+        // height: '30vh',
+        data: {content: "", image: ""}
       });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result.content}`);
-      this.content = result.content;
-    });
+    // dialogRef.afterClosed().subscribe(result => {
+      // console.log(`Dialog result: ${result.content}`);
+      // console.log(result)
+      // this.content = result.content;
+      // if (result != undefined ){
+      //   if (result.content != undefined || result.image != undefined){
+      //     if(result.content != "" || result.image != ""){
+      //       const data = {content: result.content, image: result.image}
+      //       // console.log(data)
+      //       // this.sendNewTweez(data)
+      //     }
+          
+      //   }
+        
+      // }
+      
+    // });
   }
+
+  
   
 
-  // ============= Actions ==================
+  // ============= Menu Actions ==================
 
   goToHome(){
     console.log("home")
@@ -148,7 +163,7 @@ export class AppComponent implements OnInit{
     this.router.navigate(['/profile'])
   }
 
-  /**
+  /**private router:Router,
    * Check if the router url contains the specified route
    *
    * @param {string} route
@@ -159,6 +174,8 @@ export class AppComponent implements OnInit{
     return this.router.url.includes(route);
   }
 
+  
+
 }
 
 
@@ -168,8 +185,10 @@ export class AppComponent implements OnInit{
   styleUrls: ['./app.component.dialog.css']
 })
 export class AppComponentDialog {
+  image: File | undefined;
 
   constructor(
+    private http: HttpClient,
     public dialogRef: MatDialogRef<AppComponentDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
@@ -177,6 +196,106 @@ export class AppComponentDialog {
   onNoClick(): void {
     this.dialogRef.close();
   }
+
+  
+
+  onPhotoSelected(photoSelector: HTMLInputElement){
+    if (photoSelector.files != null){
+      this.image = photoSelector.files[0];
+
+      
+
+      let fileReader = new FileReader();
+      fileReader.readAsDataURL(this.image);
+      fileReader.addEventListener(
+          "loadend",
+          ev => {
+            if (fileReader.result != null){
+              let readableString = fileReader.result.toString();
+              let postPreviewImage = <HTMLImageElement>document.getElementById("post-preview-image")
+              postPreviewImage.src = readableString;
+
+              // console.log(postPreviewImage)
+            }
+            
+          }
+      );
+    }
+    
+    
+  }
+
+
+  onPostClick(contentInput: HTMLTextAreaElement){
+    // console.log(contentInput.value)
+    console.log(this.image)
+
+
+    let formData = new FormData()
+    // let data = {content: contentInput.value, image: formData}
+
+    if (this.image != undefined ){
+      
+      formData.append('file', this.image, "testImg")
+      formData.append('content',contentInput.value)
+
+
+      this.sendNewTweez(formData)//.then(() => {this.dialogRef.close();})
+    }
+    
+    
+    
+
+    
+    
+  }
+
+  sendNewTweez(_data: any): Promise<void>{
+    const url = 'http://localhost:3000/tweezes/';
+    
+    // console.log(testImg)
+    return new Promise((resolve, reject)=>{
+
+      this.http.post(url, _data, {reportProgress: true, observe:'events'})
+        .subscribe((response) => {
+          console.log(response)
+          
+        })
+      // let formData = new FormData()
+      // if (this.image != undefined){
+      //   formData.append('file', this.image, "testImg")
+      //   formData.append('content',_data.content)
+
+      //   this.http.post(url, formData,  {
+      //     reportProgress: true,
+      //     observe: 'events',
+      //   })
+      //     .subscribe((response) => {
+      //       console.log(response)
+            
+      //   })
+      // }
+      
+    })
+  }
+
+
+  // format for the server to receive json
+  getCircularReplacer = () => {
+    const seen = new WeakSet();
+    return (key: any, value: object | null) => {
+      if (typeof value === "object" && value !== null) {
+        if (seen.has(value)) {
+          return;
+        }
+        seen.add(value);
+      }
+      return value;
+    };
+  };
+
+
+
 }
 
 

@@ -4,7 +4,7 @@
 <mat-dialog-content class="mat-typography">
   <mat-form-field  class="form" appearance="standard">
     <mat-label>What's happening...</mat-label>
-    <textarea   
+    <textarea #contentInput
       matInput
       cdkTextareaAutosize
       cdkAutosizeMinRows="4"
@@ -15,8 +15,19 @@
     <!-- <mat-text-area></mat-text-area> -->
   </mat-form-field>
 
+  <div id="post-preview" *ngIf="image!== undefined">
+    <img id="post-preview-image"/>
+  </div>
+
 </mat-dialog-content>
 <mat-dialog-actions align="end">
+  <button mat-button color="primary">
+    <label for="photo-upload">
+        <input #photoSelector (change)="onPhotoSelected(photoSelector)"
+        id="photo-upload" type="file" accept="image/*"/>
+        <mat-icon>insert_photo</mat-icon>
+    </label>
+</button>
   <button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial>Post</button>
+  <button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial (click)="onPostClick(contentInput)">Post</button>
 </mat-dialog-actions>

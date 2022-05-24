@@ -1,12 +1,16 @@
 const firebase = require('../firebase/firebase.connect');
 const { getFirestore, collection, getDocs, getDoc, doc, updateDoc, deleteDoc, addDoc, setDoc, Timestamp } = require('firebase/firestore/lite')
 const { getAuth } = require('firebase/auth')
+const { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable} = require('firebase/storage')
+
+
 
 
 const Tweez = require('../models/Tweez');
 
 const db = getFirestore(firebase)
 const auth = getAuth(firebase);
+const storage = getStorage(firebase);
 
 /**
  * GET method that returns a list of Tweez objects
@@ -75,7 +79,28 @@ const getTweezes = async (req,res,next)=>{
  * image : add a photo TODO: implement correctly
  */
 const addTweez = async (req,res,next) => {
-    const data = req.body
+
+
+    const file = req.file
+    var imageUrl = ""
+    var content = req.body.content
+
+
+    // add image to the firebase storage
+    if (file !== undefined){
+        const imageRef = ref(storage, 'tweezes/'+file.originalname);
+        const metatype = { 
+            contentType: file.mimetype, 
+            name: file.originalname,
+            };
+        const snapshot = await uploadBytes(imageRef, file.buffer, metatype)
+        imageUrl = await getDownloadURL(snapshot.ref);
+
+    }
+
+
+
+    // ==================================== working thing below==================
     var id //= "yKy3ioX5hKSOIj0zUpVMvuWtAjx1"
     var user
 
@@ -103,13 +128,14 @@ const addTweez = async (req,res,next) => {
         const newData = {
             "username": user.username, 
             "created_at":Timestamp.now(), 
-            "image":data.image,
-            "content":data.content, 
+            "image":imageUrl,
+            "content":content, 
             "likes":0, 
             "profile_picture":user["profile picture"], 
             "user_id": id, 
             "user_liked":[] 
         }
+        // console.log(newData)
 
         // add in the DB
         const newTweezRef = collection(db,'tweezes')

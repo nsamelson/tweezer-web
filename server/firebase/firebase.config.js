@@ -9,6 +9,7 @@ const firebaseConfig = {
     projectId: "tweezer-ecam",
   
     storageBucket: "tweezer-ecam.appspot.com",
+    // storageBucket: "gs://tweezer-ecam.appspot.com",
   
     messagingSenderId: "186008533111",
   
