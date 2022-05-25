@@ -1,10 +1,12 @@
 const firebase = require('../firebase/firebase.connect');
-const { getFirestore, collection, getDocs, getDoc, doc, updateDoc, deleteDoc, addDoc, setDoc, Timestamp } = require('firebase/firestore/lite')
+const { getFirestore, collection, getDocs, getDoc, doc, updateDoc, deleteDoc, addDoc, setDoc, Timestamp, where, query, orderBy} = require('firebase/firestore/lite')
 const { getAuth } = require('firebase/auth')
 const { getStorage, ref, uploadBytes, getDownloadURL, uploadBytesResumable} = require('firebase/storage')
+var URL = require('url');
 
-
-
+const {
+    getRelationships,
+    } = require('../controllers/relationship.controller');
 
 const Tweez = require('../models/Tweez');
 
@@ -18,14 +20,43 @@ const storage = getStorage(firebase);
  * @query
  * name: filter the tweezes by username  
  * id: filter the tweezes by the user_id
+ * follower: get the tweezes of only the users by giving user id
  * 
  */
 const getTweezes = async (req,res,next)=>{
+
     try{
-        const query = req.query
-        const tweezesRef = collection(db,'tweezes')
-        const data = await getDocs(tweezesRef)
+        const requery = req.query
+        var tweezesRef = collection(db,'tweezes')
+        var q
+
+        if (requery.name != undefined){
+            const name = requery.name
+            q = query(tweezesRef, where("username","==",name))
+            
+        }
+        else if(requery.id != undefined){
+            const id = requery.id
+
+            q = query(tweezesRef, where("user_id","==",id))
+        }
+        else if(requery.follower != undefined){
+
+            response = await getRelationships(req,res,next,true)
+            var users = []
+            response.forEach((user) =>{
+                users.push(user.following_id)
+            })            
+            q = query(tweezesRef, where("user_id","in",users))
+        }
+        else{
+            q = query(tweezesRef)
+        }
+
+        // const tweezesRef = collection(db,'tweezes')
+        const data = await getDocs(q)
         const tweezesArray = []
+        // res.json(data)
 
         if(data.empty){
             res.status(404).json('No tweez record found');
@@ -42,27 +73,11 @@ const getTweezes = async (req,res,next)=>{
                     doc.data().user_id,
                     doc.data().user_liked
                 )
-                //if filtering by user
-                if (query.name != undefined){
-                    const name = query.name
-                    
-                    // if name == the username
-                    if (tweez.username == name){
-                        tweezesArray.push(tweez);
-                    }
-                }
-                else if(query.id != undefined){
-                    const id = query.id
 
-                    if (tweez.user_id == id){
-                        tweezesArray.push(tweez);
-                    }
-                }
-                else{
-                    tweezesArray.push(tweez);
-                }
+                tweezesArray.push(tweez)
             })
             res.json(tweezesArray)
+            // res.json(data)
             
         }
 
@@ -76,7 +91,7 @@ const getTweezes = async (req,res,next)=>{
  * 
  * @body
  * content : content of the tweet  
- * image : add a photo TODO: implement correctly
+ * image : add a photo 
  */
 const addTweez = async (req,res,next) => {
 

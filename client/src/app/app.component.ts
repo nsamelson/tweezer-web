@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit, Input} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {Observable} from 'rxjs';
-import {map, startWith} from 'rxjs/operators';
-import { ActivatedRoute, Router } from '@angular/router';
+import {filter, map, startWith} from 'rxjs/operators';
+import { ActivatedRoute,NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
@@ -20,6 +20,7 @@ export interface DialogData {
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
+
   title = 'Tweezer';
 
   router_url: string;
@@ -29,7 +30,8 @@ export class AppComponent implements OnInit{
 
   user: any;
 
-  options: string[] =[];
+  // options: string[] =[];
+  searchedUsers = []
 
   // userDetail:any;
 
@@ -57,10 +59,10 @@ export class AppComponent implements OnInit{
     // this.options = this.user["search history"]
     
     
-    this.filteredOptions = this.myControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value)),
-    );
+    // this.filteredOptions = this.myControl.valueChanges.pipe(
+    //   startWith(''),
+    //   map(value => this._filter(value)),
+    // );
     
     // console.log(this.user)
   }
@@ -80,7 +82,7 @@ export class AppComponent implements OnInit{
           // console.log(response)
           if (this.user["id"]){
             // console.log(this.user)
-            this.options = this.user["search history"]
+            // this.options = this.user["search history"]
             // this.goToHome() //TODO: see if it's usefull or not
           }else{
             this.goToLogin()
@@ -99,10 +101,39 @@ export class AppComponent implements OnInit{
     // console.log("init")
   }
 
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
+  // private _filter(value: string): string[] {
+  //   const filterValue = value.toLowerCase();
 
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  //   return this.options.filter(option => option.toLowerCase().includes(filterValue));
+  // }
+
+  searchUsers(search_value:string): Promise<void>{
+    const url = 'http://localhost:3000/users';
+    const params = {params: {name: search_value}};
+
+    return new Promise((resolve, reject)=>{
+      this.http.get<any[]>(url,params).subscribe((response) => {
+        
+        // this.searchedUsers = response
+        const search:any = []
+
+        response.forEach((res) =>{
+          search.push({
+            id: res.id,
+            name: res.username,
+            pic: res.profile_picture
+          })
+        } )
+
+        this.searchedUsers = search
+        
+        // add user_liked if undifined in certain tweezes
+      
+
+      });
+    })
+
+
   }
 
 
@@ -115,23 +146,6 @@ export class AppComponent implements OnInit{
         data: {content: "", image: ""}
       });
 
-    // dialogRef.afterClosed().subscribe(result => {
-      // console.log(`Dialog result: ${result.content}`);
-      // console.log(result)
-      // this.content = result.content;
-      // if (result != undefined ){
-      //   if (result.content != undefined || result.image != undefined){
-      //     if(result.content != "" || result.image != ""){
-      //       const data = {content: result.content, image: result.image}
-      //       // console.log(data)
-      //       // this.sendNewTweez(data)
-      //     }
-          
-      //   }
-        
-      // }
-      
-    // });
   }
 
   
@@ -140,7 +154,7 @@ export class AppComponent implements OnInit{
   // ============= Menu Actions ==================
 
   goToHome(){
-    console.log("home")
+    // console.log("home")
     // this.isHome = true;
     // this.isLogin = false;
     // this.isProfile = false;
@@ -148,7 +162,7 @@ export class AppComponent implements OnInit{
   }
 
   goToLogin(){
-    console.log("login")
+    // console.log("login")
     // this.isHome = false;
     // this.isLogin = true;
     // this.isProfile = false;
@@ -156,12 +170,12 @@ export class AppComponent implements OnInit{
     // this.user = {}
   }
 
-  goToProfile(){
-    console.log("profile")
+  goToProfile(id:string){
+    // console.log("profile")
     // this.isHome = false;
     // this.isLogin = false;
     // this.isProfile = true;
-    this.router.navigate(['/profile/'+this.user.id])
+    this.router.navigate(['/profile/'+id])
   }
 
   /**private router:Router,
@@ -192,6 +206,7 @@ export class AppComponentDialog {
     private http: HttpClient,
     public dialogRef: MatDialogRef<AppComponentDialog>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private router: Router
   ) {}
 
   onNoClick(): void {
@@ -253,22 +268,8 @@ export class AppComponentDialog {
       this.http.post(url, _data, {reportProgress: true, observe:'events'})
         .subscribe((response) => {
           console.log(response)
-          
-        })
-      // let formData = new FormData()
-      // if (this.image != undefined){
-      //   formData.append('file', this.image, "testImg")
-      //   formData.append('content',_data.content)
 
-      //   this.http.post(url, formData,  {
-      //     reportProgress: true,
-      //     observe: 'events',
-      //   })
-      //     .subscribe((response) => {
-      //       console.log(response)
-            
-      //   })
-      // }
+        })
       
     })
   }

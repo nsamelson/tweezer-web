@@ -14,7 +14,7 @@
         Home
       </button>
   
-      <button mat-button color="secondary" class="button" (click)="goToProfile()"> 
+      <button mat-button color="secondary" class="button" (click)="goToProfile(user.id)"> 
         <mat-icon aria-hidden="false" aria-label="Example home icon">person</mat-icon>
         Profile
       </button>
@@ -47,7 +47,7 @@
   
       <span class="spacer"></span>
 
-      <button mat-button color="secondary" (click)="goToProfile()"> 
+      <button mat-button color="secondary" (click)="goToProfile(user.id)"> 
         <img class="avatar" src="{{user['profile picture']}}" *ngIf="user !== undefined">
       </button>
           
@@ -87,15 +87,18 @@
                aria-label="Search"
                matInput
                [formControl]="myControl"
-               [matAutocomplete]="auto">
-        <mat-autocomplete #auto="matAutocomplete">
-          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-            {{option}}
-          </mat-option>
-        </mat-autocomplete>
+               (keyup.enter)="searchUsers(myControl.value)">
         
       </mat-form-field>
     </form>
+
+    <!-- search result -->
+    <mat-selection-list [multiple]="false" class="search-results" *ngIf="searchedUsers!== undefined"> 
+      <mat-list-option *ngFor="let element of searchedUsers" class="result-item" (click)="goToProfile(element['id'])">
+        <img matListAvatar src="{{element['pic']}}" >
+        <h3 matLine> {{element["name"]}} </h3>
+      </mat-list-option>
+    </mat-selection-list>
     
     
 

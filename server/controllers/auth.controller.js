@@ -51,7 +51,7 @@ const signup = async (req, res, next) => {
                             // Signed in 
                             const user = userCredential.user;
             
-                            console.log("New user created")
+                            // console.log("New user created")
             
                             // redirect to add a new user
                             res.redirect(307,'/users')

@@ -43,7 +43,7 @@ export class LoginComponent implements OnInit {
   }
 
   signup(): Promise<void>{
-    console.log("signin up")
+    // console.log("signin up")
     const url = 'http://localhost:3000/auths/signup';
     const params = {};
     const headers = {"Content-Type": "application/json",'accept': 'application/json'};
@@ -70,7 +70,7 @@ export class LoginComponent implements OnInit {
   }
 
   signin(): Promise<void>{
-    console.log("signin in")
+    // console.log("signin in")
     const url = 'http://localhost:3000/auths/signin';
     const params = {};
     const headers = {"Content-Type": "application/json",'accept': 'application/json'};

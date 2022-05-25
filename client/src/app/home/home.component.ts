@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { UserService } from '../user.service';
+import { filter } from 'rxjs';
 
 
 @Component({
@@ -20,7 +21,9 @@ export class HomeComponent implements OnInit {
     private router:Router,
     private userService: UserService ) { 
 
-    this.getCurrentUser()
+
+
+      this.getCurrentUser()
 
 
     
@@ -51,11 +54,13 @@ export class HomeComponent implements OnInit {
 
   getTweezes(): Promise<void> {
     const url = 'http://localhost:3000/tweezes';
-    const params = {};
+    const params = {params: {follower: this.user.id}};
     const headers = {};
     
     return new Promise((resolve, reject)=>{
-      this.http.get<any[]>(url,{params,headers}).subscribe((response) => {
+      this.http.get<any[]>(url,params).subscribe((response) => {
+        
+        response = response.sort((a:any, b:any) => new Date(b.created_at.seconds).getTime() - new Date(a.created_at.seconds).getTime())
         this.Tweezes = response
         
         // add user_liked if undifined in certain tweezes
@@ -63,6 +68,10 @@ export class HomeComponent implements OnInit {
 
       });
     })
+  }
+
+  getSortedData(){
+    return this.Tweezes.sort((a:any, b:any) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
   }
 
   likeTweez(id: string){

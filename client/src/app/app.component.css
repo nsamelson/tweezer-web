@@ -143,4 +143,9 @@
   min-width: 28px !important;
 }
 
+.result-item{
+  /* border: 1px solid; */
+  cursor: pointer;
+}
+
 

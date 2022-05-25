@@ -15,7 +15,7 @@ const auth = getAuth(firebase);
  * - follower: filter with the follower_id
  * - following: filter with the following_id
  */
-const getRelationships = async ( req,res, next)=>{
+const getRelationships = async ( req,res, next, doReturn=false)=>{
 
     try{
         const query = req.query
@@ -52,7 +52,13 @@ const getRelationships = async ( req,res, next)=>{
                     relsArray.push(rel);
                 }
             })
-            res.json(relsArray)
+            if(doReturn){
+                return relsArray
+            }
+            else{
+                res.json(relsArray)
+            }
+            
         }
     } catch(error){
         res.status(400).json(error.message);
@@ -77,7 +83,7 @@ const addRelationship = async ( req,res, next) => {
         follower_id = data.follower_id
         following_id = data.following_id
     }
-    console.log(follower_id)
+    // console.log(follower_id)
     // const data = req.body
     //TODO: maybe get the current user Id
     //TODO: does it changes the number of followers for the users?
@@ -88,7 +94,7 @@ const addRelationship = async ( req,res, next) => {
             "following_id": following_id,
             "created_at": Timestamp.now()
         }
-        console.log(newData)
+        // console.log(newData)
 
         // add in the DB
         const newRelRef = collection(db,"relationships")

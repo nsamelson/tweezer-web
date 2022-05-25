@@ -97,6 +97,7 @@ const addUser = async (req, res, next) => {
     // create user doc
     try {
         const newData = {
+            "id": id,
             "username": username,
             "email": email,
             "password": password,

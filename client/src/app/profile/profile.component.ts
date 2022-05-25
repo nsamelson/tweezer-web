@@ -126,6 +126,7 @@ export class ProfileComponent implements OnInit {
     
     return new Promise((resolve, reject)=>{
       this.http.get<any[]>(url, params).subscribe((response) => {
+        response = response.sort((a:any, b:any) => new Date(b.created_at.seconds).getTime() - new Date(a.created_at.seconds).getTime())
         this.userTweezes = response
         // console.log(response)
 
@@ -148,7 +149,7 @@ export class ProfileComponent implements OnInit {
           this.relations.forEach((item: any) => {
             if(item.follower_id == this.myProfile.id){
               this.isFollowing = true
-              console.log(this.isFollowing)
+              // console.log(this.isFollowing)
               return
             } 
           })
