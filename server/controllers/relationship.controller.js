@@ -68,16 +68,27 @@ const getRelationships = async ( req,res, next)=>{
  * - following_id: the user that is followed
  */
 const addRelationship = async ( req,res, next) => {
-    const data = req.body
+    try {
+        var data = JSON.parse(req.body.data);
+        follower_id = data.follower_id
+        following_id = data.following_id
+    }catch {
+        var data = req.body;
+        follower_id = data.follower_id
+        following_id = data.following_id
+    }
+    console.log(follower_id)
+    // const data = req.body
     //TODO: maybe get the current user Id
     //TODO: does it changes the number of followers for the users?
 
     try{
         const newData = {
-            "follower_id": data.follower_id,
-            "following_id": data.following_id,
+            "follower_id": follower_id,
+            "following_id": following_id,
             "created_at": Timestamp.now()
         }
+        console.log(newData)
 
         // add in the DB
         const newRelRef = collection(db,"relationships")
@@ -91,6 +102,9 @@ const addRelationship = async ( req,res, next) => {
     } catch (error) {
         res.status(400).json({"message": error.message});
     }
+
+    // console.log("after the request")
+    // get the number
 }
 
 /**

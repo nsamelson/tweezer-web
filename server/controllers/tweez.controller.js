@@ -180,9 +180,16 @@ const getTweez = async (req, res,next) =>{
  * id: id of the specific tweez
  */
  const updateTweez = async (req, res, next) => {
+    const id = req.params.id;
     try {
-        const id = req.params.id;
-        const data = req.body;
+        var data = JSON.parse(req.body.data);
+    }catch {
+        var data = req.body;
+    }
+
+    try {
+        // const id = req.params.id;
+        // const data = req.body;
 
         const ref = doc(db,'tweezes',id);
         await updateDoc(ref, data)

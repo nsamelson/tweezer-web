@@ -161,7 +161,7 @@ export class AppComponent implements OnInit{
     // this.isHome = false;
     // this.isLogin = false;
     // this.isProfile = true;
-    this.router.navigate(['/profile'])
+    this.router.navigate(['/profile/'+this.user.id])
   }
 
   /**private router:Router,
