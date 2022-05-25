@@ -27,7 +27,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
-import { ProfileComponent } from './profile/profile.component';
+import { ProfileComponent, ProfileComponentDialog } from './profile/profile.component';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatCardModule } from '@angular/material/card';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
@@ -47,6 +47,7 @@ import { UserService } from './user.service';
     LoginComponent,
     ProfileComponent,
     AppComponentDialog,
+    ProfileComponentDialog
     
   ],
   imports: [

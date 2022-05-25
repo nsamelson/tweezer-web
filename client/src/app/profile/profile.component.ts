@@ -1,9 +1,18 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Component, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Inject, OnInit, SimpleChanges } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { UserService } from '../user.service';
 import { filter } from 'rxjs/operators';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+// import { DialogData } from '../app.component';
 
+export interface DialogData {
+  bio: string;
+  password: string;
+  oldPassword: string;
+  oldBio: string;
+  user_id: string
+}
 
 @Component({
   selector: 'app-profile',
@@ -28,7 +37,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private http: HttpClient,
     private userService: UserService,
-    private activatedRoute:ActivatedRoute
+    private activatedRoute:ActivatedRoute,
+    public dialog: MatDialog, 
     ) { 
 
       
@@ -282,6 +292,24 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  // =============== Open edit dialog ============
+  openDialog(){
+    const bio: string = this.myProfile.bio.toString();
+    const password: string = this.myProfile.password.toString()
+
+    const dialogRef = this.dialog.open(ProfileComponentDialog,
+      {
+        width: '40vw',
+        height: '50vh',
+        data: {
+          bio: bio, 
+          password: password, 
+          oldPassword: password, 
+          oldBio: bio, 
+          user_id: this.myProfile.id}
+      });
+  }
+
 
   // format for the server to receive json
   getCircularReplacer = () => {
@@ -300,4 +328,64 @@ export class ProfileComponent implements OnInit {
 
 
 
+}
+
+
+@Component({
+  selector: 'profile-component-dialog',
+  templateUrl: './profile.component.dialog.html',
+  styleUrls: ['./profile.component.dialog.css']
+})
+export class ProfileComponentDialog {
+
+  hide = true
+  
+  constructor(
+    private http: HttpClient,
+    public dialogRef: MatDialogRef<ProfileComponentDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+    private router: Router
+  ) {}
+
+  onNoClick(): void {
+    this.dialogRef.close();
+  }
+
+  onPostClick(){
+
+    const newBio: string = this.data.bio;
+    const newPassword = this.data.password
+    var newData = {}
+
+    if (newBio != this.data.oldBio){
+      newData= {...newData,...{bio: newBio}}
+    }
+    if (newPassword != this.data.oldPassword){
+      newData= {...newData,...{password: newPassword}}
+    }
+    
+
+    if (Object.keys(newData).length !== 0){
+      this.editProfile(newData)
+    }
+
+    
+    
+
+  }
+  editProfile(newData:any): Promise<void>{
+    const url = 'http://localhost:3000/users/'+this.data.user_id;
+    
+    // console.log(testImg)
+    return new Promise((resolve, reject)=>{
+
+      this.http.put(url, newData, {reportProgress: true, observe:'events'})
+        .subscribe((response) => {
+          console.log(response)
+          
+
+        })
+      
+    })
+  }
 }

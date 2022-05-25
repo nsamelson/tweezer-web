@@ -1,7 +1,9 @@
 const firebase = require('../firebase/firebase.connect');
 const { getFirestore, collection, getDocs, getDoc, doc, updateDoc, deleteDoc, addDoc, setDoc } = require('firebase/firestore/lite')
 const { getAuth } = require('firebase/auth')
-
+const {
+    changePassword,
+    } = require('../controllers/auth.controller');
 
 const User = require('../models/User');
 
@@ -162,16 +164,39 @@ const getUser = async (req, res, next) => {
  */
 const updateUser = async (req, res, next) => {
     try {
+        
         const id = req.params.id;
         const data = req.body;
-
         const user = doc(db,'users',id);
-        await updateDoc(user, data)
-            .then(() => {
-                res.json({"message": "user updated"});
-            }).catch((error)=>{
-                res.status(404).json({"message":'user with the given ID not found'});
-            })
+
+        if (data.password !== undefined){
+            changed = await changePassword(req,res,next, data.password)
+            if (changed == "password changed"){
+                await updateDoc(user, data)
+                    .then(() => {
+                        res.json({"message": "user updated"});
+                    }).catch((error)=>{
+                        res.status(404).json({"message":'user with the given ID not found'});
+                    })
+            }
+        }
+        else if(data.bio !== undefined){
+            await updateDoc(user, {bio: data.bio})
+                .then(() => {
+                    res.json({"message": "user updated"});
+                }).catch((error)=>{
+                    res.status(404).json({"message":'user with the given ID not found'});
+                })
+        }
+        
+
+        // const user = doc(db,'users',id);
+        // await updateDoc(user, data)
+        //     .then(() => {
+        //         res.json({"message": "user updated"});
+        //     }).catch((error)=>{
+        //         res.status(404).json({"message":'user with the given ID not found'});
+        //     })
     } catch (error) {
         res.status(400).json({"message": error.message});
     }

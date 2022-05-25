@@ -1,6 +1,6 @@
 const firebase = require('../firebase/firebase.connect');
 const { getFirestore, collection, getDocs, doc, setDoc} = require('firebase/firestore/lite')
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,  } = require('firebase/auth')
+const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updatePassword  } = require('firebase/auth')
 
 const db = getFirestore(firebase);
 const auth = getAuth(firebase);
@@ -126,6 +126,25 @@ const getCurrentUser = async (req,res,next)=>{
     }
 }
 
+const changePassword = async (req,res, next, password)=>{
+    
+    var user = auth.currentUser;
+    if (user) {
+        await updatePassword(user, password)
+            // .then((response)=>{
+            //     msg
+            //     return "password changed"
+            // }).catch((err)=>{
+            //     console.log(err)
+            // })
+        // console.log("did it changed",response)
+        msg = "password changed"
+        return msg
+    }
+
+}
+
+
 //TODO: change password
 
 //TODO: change email (not important)
@@ -136,5 +155,6 @@ const getCurrentUser = async (req,res,next)=>{
 module.exports = {
     signup,
     signin,
-    getCurrentUser
+    getCurrentUser,
+    changePassword
 }

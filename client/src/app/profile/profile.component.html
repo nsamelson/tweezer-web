@@ -21,7 +21,7 @@
               <span class="spacer"></span>
               <div class="edit-button" *ngIf="isMyProfile">
                   <button mat-flat-button color="primary" class="button"> 
-                      <mat-icon aria-hidden="false" aria-label="Example home icon">edit</mat-icon>
+                      <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="openDialog()">edit</mat-icon>
                       Edit
                   </button>
               </div>

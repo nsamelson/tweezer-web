@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>
+    Change profile details
+</h2>
+
+<mat-dialog-content class="form-container">
+    <mat-form-field  class="form" appearance="fill">
+      <mat-label>What's happening...</mat-label>
+
+      <textarea #bioInput
+        matInput
+        cdkTextareaAutosize
+        cdkAutosizeMinRows="4"
+        cdkAutosizeMaxRows="4"
+        type="text"
+        [(ngModel)]="data.bio"
+        ></textarea>
+    </mat-form-field>
+
+    <mat-form-field  class="form" appearance="fill">
+        <mat-label>Insert a new password</mat-label>
+
+        <input matInput [type] = "hide ? 'password' : 'text'" #passInput [(ngModel)]="data.password">
+        <button mat-icon-button matSuffix (click) = "hide = !hide" [attr.aria-label] = "'Hide password'" [attr.aria-pressed] = "hide"> 
+            <mat-icon> {{hide ? 'visibility_off' : 'visibility'}} </mat-icon>  
+        </button>  
+      </mat-form-field>
+  
+</mat-dialog-content> 
+
+
+<div mat-dialog-actions align="end">
+<button mat-stroked-button color="primary" mat-dialog-close>Cancel</button>
+<button mat-raised-button color="primary" [mat-dialog-close]="data" cdkFocusInitial (click)="onPostClick()">Change</button>
+</div>
+
+
