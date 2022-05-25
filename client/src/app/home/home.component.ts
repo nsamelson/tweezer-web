@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -12,7 +13,7 @@ export class HomeComponent implements OnInit {
   Tweezes: any=[]
   username = "nico"
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient,private router:Router, ) { 
     this.getTweezes()
 
   }
@@ -30,32 +31,16 @@ export class HomeComponent implements OnInit {
       this.http.get<any[]>(url,{params,headers}).subscribe((response) => {
         this.Tweezes = response
         
-        // if user_liked is undifined in certain tweezes
-        
-        // response.forEach((tweez) =>{
-        //   let likes: any[] = []
-        //   if(tweez.user_liked !== undefined)
-        //   {
-        //     likes = tweez.user_liked
-        //   } 
-
-        //   // avoid doing this by getting all tweezes a definied user_liked array
-        //   this.Tweezes.push({
-        //     id: tweez.id,
-        //     username: tweez.username,
-        //     created_at: tweez.created_at,
-        //     image: tweez.image,
-        //     content: tweez.content,
-        //     likes: tweez.likes,
-        //     profile_picture: tweez.profile_picture,
-        //     user_id: tweez.user_id,
-        //     user_liked: likes
-        //   })
-
-        // })
+        // add user_liked if undifined in certain tweezes
+      
 
       });
     })
+  }
+
+  goToProfile(id: string){
+    // console.log(id)
+    this.router.navigate(['/profile/'+id])
   }
 
 }

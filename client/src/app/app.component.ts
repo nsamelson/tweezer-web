@@ -45,7 +45,7 @@ export class AppComponent implements OnInit{
     // automatically update data
     this.userService.userDetail.subscribe( value => {
       this.user = value;
-      console.log( value)
+      // console.log( value)
     });
 
 
@@ -81,7 +81,7 @@ export class AppComponent implements OnInit{
           if (this.user["id"]){
             // console.log(this.user)
             this.options = this.user["search history"]
-            this.goToHome()
+            // this.goToHome() //TODO: see if it's usefull or not
           }else{
             this.goToLogin()
           }
@@ -148,6 +148,7 @@ export class AppComponent implements OnInit{
   }
 
   goToLogin(){
+    console.log("login")
     // this.isHome = false;
     // this.isLogin = true;
     // this.isProfile = false;
@@ -156,7 +157,7 @@ export class AppComponent implements OnInit{
   }
 
   goToProfile(){
-    console.log("clicked")
+    console.log("profile")
     // this.isHome = false;
     // this.isLogin = false;
     // this.isProfile = true;
@@ -227,27 +228,20 @@ export class AppComponentDialog {
 
 
   onPostClick(contentInput: HTMLTextAreaElement){
-    // console.log(contentInput.value)
-    console.log(this.image)
-
 
     let formData = new FormData()
-    // let data = {content: contentInput.value, image: formData}
 
     if (this.image != undefined ){
       
       formData.append('file', this.image, "testImg")
-      formData.append('content',contentInput.value)
-
-
-      this.sendNewTweez(formData)//.then(() => {this.dialogRef.close();})
+      //.then(() => {this.dialogRef.close();})
     }
-    
-    
+
+
+    formData.append('content',contentInput.value)
+    this.sendNewTweez(formData)
     
 
-    
-    
   }
 
   sendNewTweez(_data: any): Promise<void>{
