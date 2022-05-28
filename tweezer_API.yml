@@ -38,7 +38,7 @@ paths:
     post:
       tags:
         - users
-      summary: Creates a new user (DO NOT USE)
+      summary: Creates a new user (please use /auths/signin instead)
       requestBody:
         required: true
         content:
@@ -109,12 +109,9 @@ paths:
                 bio:
                   type: string
                   example: "hello good people"
-                profile_cover:
+                password:
                   type: string
-                  example: ""
-                profile_picture:
-                  type: string
-                  example: https://firebasestorage.googleapis.com/v0/b/tweezer-ecam.appspot.com/o/profiles%2FProfile%20pictures%2Fblank-profile-picture-973460_1280.webp?alt=media&token=ee3911d9-d138-4b6c-8b0e-32e157da82b6
+                  example: "StrongPassword123!"
       responses:
         '200':
           description: OK
@@ -133,7 +130,7 @@ paths:
     delete:
       tags:
         - users
-      summary: delete a user by id (DO NOT USE)
+      summary: delete a user by id 
       parameters:
         - in: path
           name: id
@@ -162,7 +159,7 @@ paths:
     post:
       tags:
         - auths
-      summary: Sign up a new user and logs in
+      summary: Sign up a new user, redirects to '/users' as POST method and logs in
       requestBody:
         required: true
         content:
@@ -250,6 +247,12 @@ paths:
         - in: query
           name: id
           description: Query parameter to filter by user_id
+          schema:
+            type: string
+            example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1
+        - in: query
+          name: follower
+          description: Query parameter to filter by follower_id. Calls a GET method of '/rels' with query parameter of the follower_id
           schema:
             type: string
             example: yKy3ioX5hKSOIj0zUpVMvuWtAjx1

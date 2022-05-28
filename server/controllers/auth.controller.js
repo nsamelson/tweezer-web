@@ -13,6 +13,8 @@ const auth = getAuth(firebase);
  * - email
  * - password
  * - username (unique)
+ * 
+ * @redirects to POST method at "/users" to create a complete user profile
  */
 const signup = async (req, res, next) => {
     // const data = req.body;
@@ -114,6 +116,11 @@ const signin = async(req, res,next)=>{
     
 }
 
+/**
+ * GET method to return the current user logged in
+ * 
+ * @redirects to /users/:user_id
+ */
 const getCurrentUser = async (req,res,next)=>{
     var user = auth.currentUser;
 
@@ -126,18 +133,17 @@ const getCurrentUser = async (req,res,next)=>{
     }
 }
 
+/**
+ * "PUT" method to update the password
+ * 
+ * @returns a confirmation of the changed password
+ */
 const changePassword = async (req,res, next, password)=>{
     
     var user = auth.currentUser;
     if (user) {
         await updatePassword(user, password)
-            // .then((response)=>{
-            //     msg
-            //     return "password changed"
-            // }).catch((err)=>{
-            //     console.log(err)
-            // })
-        // console.log("did it changed",response)
+
         msg = "password changed"
         return msg
     }
@@ -145,9 +151,8 @@ const changePassword = async (req,res, next, password)=>{
 }
 
 
-//TODO: change password
 
-//TODO: change email (not important)
+
 
 //TODO: delete user (not important)
 
