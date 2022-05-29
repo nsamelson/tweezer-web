@@ -248,7 +248,7 @@ export class AppComponentDialog {
 
     if (this.image != undefined ){
       
-      formData.append('file', this.image, "testImg")
+      formData.append('file', this.image)
       //.then(() => {this.dialogRef.close();})
     }
 
