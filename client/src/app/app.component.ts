@@ -1,11 +1,9 @@
 import { Component, Inject, OnInit, Input} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {Observable} from 'rxjs';
-import {filter, map, startWith} from 'rxjs/operators';
 import { ActivatedRoute,NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
 import { UserService } from './user.service';
 
 export interface DialogData {
@@ -22,19 +20,11 @@ export interface DialogData {
 export class AppComponent implements OnInit{
 
   title = 'Tweezer';
-
   router_url: string;
-
-  // content!: string;
-  // picture!: string;
-
   user: any;
-
-  // options: string[] =[];
   searchedUsers = []
-
+  myControl = new FormControl();
   // userDetail:any;
-
 
   constructor(
     private route: ActivatedRoute,
@@ -43,31 +33,28 @@ export class AppComponent implements OnInit{
     private http: HttpClient,
     private userService: UserService) {
 
-
     // automatically update data
     this.userService.userDetail.subscribe( value => {
       this.user = value;
-      // console.log( value)
     });
-
 
     // this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router_url = router.url;
 
-    this.getCurrentUser()
-
-    // this.options = this.user["search history"]
-    
-    
-    // this.filteredOptions = this.myControl.valueChanges.pipe(
-    //   startWith(''),
-    //   map(value => this._filter(value)),
-    // );
-    
+    this.getCurrentUser()    
     // console.log(this.user)
   }
 
-  //============== Get the current user =================
+  ngOnInit() {
+    // console.log("init")
+  }
+
+  // ============= API calls ============== //
+
+  /** Get the currently connected user
+   * 
+   * @returns Promise : sets the user object or redirect to login page
+   */
   getCurrentUser(): Promise<void>{
     const url = 'http://localhost:3000/auths/user';
     const params = {};
@@ -75,15 +62,13 @@ export class AppComponent implements OnInit{
 
 
     return new Promise((resolve, reject)=>{
-
       this.http.get(url,{params,headers})
         .subscribe((response) => {
           this.user = response;
           // console.log(response)
+
           if (this.user["id"]){
             // console.log(this.user)
-            // this.options = this.user["search history"]
-            // this.goToHome() //TODO: see if it's usefull or not
           }else{
             this.goToLogin()
           }
@@ -91,22 +76,13 @@ export class AppComponent implements OnInit{
         })
     })
   }
-
-  // ============= SEARCH HISTORY + FILTER =============
-  myControl = new FormControl();
   
-  filteredOptions!: Observable<string[]>;
 
-  ngOnInit() {
-    // console.log("init")
-  }
-
-  // private _filter(value: string): string[] {
-  //   const filterValue = value.toLowerCase();
-
-  //   return this.options.filter(option => option.toLowerCase().includes(filterValue));
-  // }
-
+  /** Search users by name
+   * 
+   * @param search_value name of the user
+   * @returns Promise : Array of searchedUsers(id, name, pic)
+   */
   searchUsers(search_value:string): Promise<void>{
     const url = 'http://localhost:3000/users';
     const params = {params: {name: search_value}};
@@ -114,7 +90,6 @@ export class AppComponent implements OnInit{
     return new Promise((resolve, reject)=>{
       this.http.get<any[]>(url,params).subscribe((response) => {
         
-        // this.searchedUsers = response
         const search:any = []
 
         response.forEach((res) =>{
@@ -125,19 +100,17 @@ export class AppComponent implements OnInit{
           })
         } )
 
-        this.searchedUsers = search
-        
-        // add user_liked if undifined in certain tweezes
-      
+        this.searchedUsers = search     
 
       });
     })
-
-
   }
 
+  // ================ Dialog ================= //
 
-  // ============= Tweez dialog =============
+  /** Open dialog to create a new Tweez
+   * 
+   */
   openDialog() {
     const dialogRef = this.dialog.open(AppComponentDialog,
       {
@@ -145,53 +118,39 @@ export class AppComponent implements OnInit{
         // height: '30vh',
         data: {content: "", image: ""}
       });
-
   }
 
   
-  
-
-  // ============= Menu Actions ==================
+  // ============= Menu Actions ================== //
 
   goToHome(){
-    // console.log("home")
-    // this.isHome = true;
-    // this.isLogin = false;
-    // this.isProfile = false;
     this.router.navigate(['/home'])
   }
 
   goToLogin(){
-    // console.log("login")
-    // this.isHome = false;
-    // this.isLogin = true;
-    // this.isProfile = false;
     this.router.navigate(['/login'])
-    // this.user = {}
   }
 
   goToProfile(id:string){
-    // console.log("profile")
-    // this.isHome = false;
-    // this.isLogin = false;
-    // this.isProfile = true;
     this.router.navigate(['/profile/'+id])
   }
 
-  /**private router:Router,
-   * Check if the router url contains the specified route
+  /**private router:Router,  
+   * Check if the router url contains the specified route  
+   * (Used in the app.component.html)
    *
    * @param {string} route
-   * @returns
+   * @returns true or false
    * @memberof MyComponent
    */
   hasRoute(route: string) {
     return this.router.url.includes(route);
   }
-
-  
-
 }
+
+
+
+// ================= DIALOG COMPONENT ================ //
 
 
 @Component({
@@ -214,12 +173,13 @@ export class AppComponentDialog {
   }
 
   
-
+  /** Add a photo to the post
+   * 
+   * @param photoSelector image to send
+   */
   onPhotoSelected(photoSelector: HTMLInputElement){
     if (photoSelector.files != null){
       this.image = photoSelector.files[0];
-
-      
 
       let fileReader = new FileReader();
       fileReader.readAsDataURL(this.image);
@@ -237,28 +197,32 @@ export class AppComponentDialog {
           }
       );
     }
-    
-    
   }
 
-
+  /** Post tweez button
+   * 
+   * @param contentInput inserted text
+   */
   onPostClick(contentInput: HTMLTextAreaElement){
 
     let formData = new FormData()
 
-    if (this.image != undefined ){
-      
+    if (this.image != undefined ){      
       formData.append('file', this.image)
       //.then(() => {this.dialogRef.close();})
     }
 
-
     formData.append('content',contentInput.value)
     this.sendNewTweez(formData)
-    
-
   }
 
+  // ============= API calls ============== //
+
+  /** add new tweez 
+   * 
+   * @param _data formData containing key 'file' and 'content'
+   * @returns Promise: console message
+   */
   sendNewTweez(_data: any): Promise<void>{
     const url = 'http://localhost:3000/tweezes/';
     
@@ -275,7 +239,10 @@ export class AppComponentDialog {
   }
 
 
-  // format for the server to receive json
+  /** format for the server to receive json
+   * 
+   * @returns value in correct json format
+   */
   getCircularReplacer = () => {
     const seen = new WeakSet();
     return (key: any, value: object | null) => {
@@ -288,8 +255,6 @@ export class AppComponentDialog {
       return value;
     };
   };
-
-
 
 }
 

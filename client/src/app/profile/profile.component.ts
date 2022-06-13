@@ -23,12 +23,9 @@ export class ProfileComponent implements OnInit {
 
   user: any
   userTweezes: any = []
-
   searchId: any
-
   isMyProfile:boolean = true
   myProfile: any
-
   isFollowing: boolean = false
   relations: any
 
@@ -41,11 +38,12 @@ export class ProfileComponent implements OnInit {
     public dialog: MatDialog, 
     ) { 
 
-      
+      // on url update (if the id in the url changed)
       router.events.pipe(
         filter(event => event instanceof NavigationEnd)  
         ).subscribe((event: any) => {
-          // console.log(event.url);
+
+          // get user id from the url
           if (event.url.includes('profile')){
             this.searchId = this.activatedRoute.snapshot.paramMap.get('id')
             this.getCurrentUser()
@@ -53,7 +51,6 @@ export class ProfileComponent implements OnInit {
           
       });
 
-      
       try{
         this.searchId = this.activatedRoute.snapshot.paramMap.get('id')
       }catch{
@@ -62,16 +59,15 @@ export class ProfileComponent implements OnInit {
 
     }
 
-  ngOnInit(): void {
-
-
-    // this.getCurrentUser()
-
-    
+  ngOnInit(): void {    
   }
 
+  // ============= API calls ============== //
 
-  //============== Get the connected user =================
+  /** Get the currently connected user
+   * 
+   * @returns Promise : sets the myProfile object and calls getSearchUser()
+   */
   getCurrentUser(): Promise<void>{
     const url = 'http://localhost:3000/auths/user';
     const params = {};
@@ -92,7 +88,10 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-  // ================= Get searched user ==========
+  /** Get the user information I searched
+   * 
+   * @returns Promise : sets the user object and calls getFollowers(), getFollowing(), getTweezes()
+   */
   getSearchUser(): Promise<void>{
     const url = 'http://localhost:3000/users/'+this.searchId;
     const params = {};
@@ -107,18 +106,17 @@ export class ProfileComponent implements OnInit {
           const res: any = response
           if (res["id"] !== undefined){
             this.user = response;
-
+            
+            // if the user I'm searching for is my user profile or not
             if (this.user.id == this.myProfile.id){
               this.isMyProfile = true
             }
             else{
-              this.isMyProfile = false
-              
-              // TODO: search followings
+              this.isMyProfile = false              
             }
+
             this.getFollowers()
             this.getFollowing()
-
             this.getTweezes()
           }
 
@@ -126,7 +124,11 @@ export class ProfileComponent implements OnInit {
     })
   }
 
-
+  /** Get the tweezes of the selected user  
+   * sort by date in  descending order
+   * 
+   * @returns Promise: sets userTweezes as an array of the Tweezes
+   */
   getTweezes(): Promise<void> {
     const url = 'http://localhost:3000/tweezes';
     
@@ -144,6 +146,11 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  /** Get the followers of the searched user
+   * 
+   * @returns Promise: sets the number of followers of the searched user,
+   * sets if the current user follows the searched user
+   */
   getFollowers(): Promise<void>{
     const url = "http://localhost:3000/rels"
     const params = {params: {following: this.user.id}};
@@ -157,6 +164,8 @@ export class ProfileComponent implements OnInit {
 
         if( !this.isMyProfile){
           this.relations.forEach((item: any) => {
+
+            // if the current user follows the searched user
             if(item.follower_id == this.myProfile.id){
               this.isFollowing = true
               // console.log(this.isFollowing)
@@ -170,6 +179,10 @@ export class ProfileComponent implements OnInit {
     })
   }
 
+  /** Get the users the searched user follows
+   * 
+   * @returns Promise: sets the number of users the searched user follows
+   */
   getFollowing(): Promise<void>{
     const url = "http://localhost:3000/rels"
     const params = {params: {follower: this.user.id}};
@@ -179,12 +192,14 @@ export class ProfileComponent implements OnInit {
 
         this.user.following = response.length
 
-        
-
       });
     })
   }
 
+  /** Post a new relationship to follow the searched user
+   * 
+   * @returns Promise: console message, calls getSearchUser()
+   */
   followUser(): Promise<void>{
     const url = "http://localhost:3000/rels"
     const params = {};
@@ -204,6 +219,10 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  /** Deletes a relationship between the current user and the searched user to unfollow him
+   * 
+   * @returns Promise: console message, calls getSearchUser()
+   */
   unFollowUser():Promise<void>{
 
     var relation: any
@@ -226,6 +245,11 @@ export class ProfileComponent implements OnInit {
 
   }
 
+   /** Like a tweez
+   * 
+   * @param id id of the tweez to like
+   * @returns Promise: console message
+   */
   likeTweez(id: string){
 
     // get current tweez info
@@ -257,6 +281,11 @@ export class ProfileComponent implements OnInit {
 
   }
 
+  /** Unlinke an already liked tweez
+   * 
+   * @param id id of the tweez to unlinke
+   * @returns Promise: console message
+   */
   unLikeTweez(id: string){
 
     // get current tweez info
@@ -292,7 +321,11 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  // =============== Open edit dialog ============
+  // ================ Dialog ================= //
+  
+  /** Open dialog to edit the profile of the current user
+   * 
+   */
   openDialog(){
     const bio: string = this.myProfile.bio.toString();
     const password: string = this.myProfile.password.toString()
@@ -311,7 +344,10 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  // format for the server to receive json
+  /** format for the server to receive json
+   * 
+   * @returns value in correct json format
+   */
   getCircularReplacer = () => {
     const seen = new WeakSet();
     return (key: any, value: object | null) => {
@@ -325,10 +361,11 @@ export class ProfileComponent implements OnInit {
     };
   };
 
-
-
-
 }
+
+
+// ================= DIALOG COMPONENT ================ //
+
 
 
 @Component({
@@ -351,6 +388,9 @@ export class ProfileComponentDialog {
     this.dialogRef.close();
   }
 
+  /** Update user informatin button
+   * 
+   */
   onPostClick(){
 
     const newBio: string = this.data.bio;
@@ -368,11 +408,15 @@ export class ProfileComponentDialog {
     if (Object.keys(newData).length !== 0){
       this.editProfile(newData)
     }
-
-    
-    
-
   }
+
+  // ============= API calls ============== //
+
+  /** update user information
+   * 
+   * @param newData body containing key 'bio' and/or 'password'
+   * @returns Promise: console message
+   */
   editProfile(newData:any): Promise<void>{
     const url = 'http://localhost:3000/users/'+this.data.user_id;
     

@@ -11,7 +11,14 @@ import { UserService } from '../user.service';
 })
 export class LoginComponent implements OnInit {
 
+  hide = true       //hide password
+  isSignup = false
 
+
+  // get form data
+  email = new FormControl('', [Validators.required, Validators.email]);
+  username = new FormControl('', [Validators.required]);
+  password = new FormControl('', [Validators.required]);
   
   constructor(
     private http: HttpClient,
@@ -21,19 +28,15 @@ export class LoginComponent implements OnInit {
       
   }
 
-
   ngOnInit(): void {
   }
 
-  hide = true       //hide password
-  isSignup = false
-
-
-  // get form data
-  email = new FormControl('', [Validators.required, Validators.email]);
-  username = new FormControl('', [Validators.required]);
-  password = new FormControl('', [Validators.required]);
-
+  // ================ Error handling =============== //
+  
+  /** Display if the email has an error
+   * 
+   * @returns error message
+   */
   getErrorMessage() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';
@@ -42,6 +45,12 @@ export class LoginComponent implements OnInit {
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
 
+  // =============== API calls ================== //
+
+  /** Create a new user account
+   * 
+   * @returns Promise: calls 'getCurrentUser()' to update the user and navigates to the home page
+   */
   signup(): Promise<void>{
     // console.log("signin up")
     const url = 'http://localhost:3000/auths/signup';
@@ -60,15 +69,17 @@ export class LoginComponent implements OnInit {
           this.zone.run(() =>{
 
             this.getCurrentUser()
-            this.router.navigate(['/home'])
-            
+            this.router.navigate(['/home'])           
 
-          })
-          
+          })          
         })
     })
   }
 
+  /** Logs in with existing user account
+   * 
+   * @returns Promise: calls 'getCurrentUser()' to update the user and navigates to the home page
+   */
   signin(): Promise<void>{
     // console.log("signin in")
     const url = 'http://localhost:3000/auths/signin';
@@ -88,15 +99,16 @@ export class LoginComponent implements OnInit {
             this.getCurrentUser()
             this.router.navigate(['/home'])
             
-            
-            // this.userService.userDetail.next({"hello":"there"});
           })
           
         })
     })
   }
 
-  // get user info after connecting with a new account
+  /** Get the currently connected user
+   * 
+   * @returns Promise : sets the user object or redirect to login page
+   */
   getCurrentUser(): Promise<void>{
     const url = 'http://localhost:3000/auths/user';
     const params = {};
@@ -115,7 +127,10 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  // format for the server to receive json
+  /** format for the server to receive json
+   * 
+   * @returns value in correct json format
+   */
   getCircularReplacer = () => {
     const seen = new WeakSet();
     return (key: any, value: object | null) => {
