@@ -10,6 +10,20 @@ application, which is a [project](https://github.com/wasanico/tweezer) in develo
 The web application will use the same database as the mobile app (hosted on Firebase
 services). The back-end server will be built under NodeJs and the front-end under Angular.  
 
+### User stories
+
+1. As a user, I want to create an account;
+2. As a user, I want to connect to my account;
+3. As a user, I want to modify my password in order to increase security;
+4. As a user, I want to modify my profile information;
+5. As a user, I want to create a post;
+6. As a user, I want to like another user’s posts;
+7. As a user, I want to search a specific user in order to see its profile;
+8. As a user, I want to see all the posts of a user;
+9. As a user, I want to follow a user;
+10. As a user, I want to see the new posts of the users I follow.
+
+
 ## 1. Architecture  
 
 The application is divided in 3 parts :
@@ -54,8 +68,26 @@ Inside, you will find 4 components, that are under the Module ```App``` :
 4. In the terminal, under the ```client``` path, write ```ng serve``` to start the front-end application
 5. Open your browser, and type [localhost:4200/](http://localhost:4200/) to access to the site.
 
-## 4. Dependencies
+## 4. Dependencies and links
+
+- The project uses the following services of [Firebase](https://console.firebase.google.com/u/0/) : Authentication, Firestore Database and Storage;
+- The API documentation is written under the OpenAPI Specification and is available on [SwaggerHub](https://app.swaggerhub.com/apis-docs/wasanico/tweezer/1.0)
+- The Backend application requires the following packages :
+    - express
+    - bodyParser
+    - cors
+    - firebase
+- The Frontend application requires the following packages :
+    - angular
+    - rxjs
+    - zone
+    - tslib
 
 
 
 ## 5. Continue the project
+
+The first suggested improvement would be to add better and consistent error handling accross the whole application.  
+On the security side, it would be advised to set strict rules in the [Firebase console](https://console.firebase.google.com/u/0/), and also remove redundant and insecure data. Furthermore, each function in the controller should first verify the identity of the user, in case he is unexpectedly disconnected.  
+An other improvement would be to subdivide responses in subsets of 100 items, to improve response speed if there are too many items.  
+Finally a last improvement would be to allow more profile personnalization (e.g. change profile picture, profile cover,..)
