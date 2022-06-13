@@ -11,7 +11,7 @@ const app = express();
 // app settings
 app.use(bodyParser.json());
 
-// allow urls
+// allow requests from these urls
 const allowedOrigins = [
   'capacitor://localhost',
   'swagger://localhost',

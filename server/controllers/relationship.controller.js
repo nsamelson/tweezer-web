@@ -20,6 +20,8 @@ const getRelationships = async ( req,res, next, doReturn=false)=>{
     try{
         const query = req.query
         const relsRef = collection(db,'relationships')
+
+        // TODO: replace by 'query(relsRef, where("follower_id","==",#id))'
         const data = await getDocs(relsRef)
 
         const relsArray = []
@@ -32,6 +34,7 @@ const getRelationships = async ( req,res, next, doReturn=false)=>{
                     doc.data().follower_id,
                     doc.data().following_id
                 )
+
                 //if filtering by follower_id
                 if (query.follower !== undefined){
                     const follower = query.follower 
@@ -41,6 +44,7 @@ const getRelationships = async ( req,res, next, doReturn=false)=>{
                         
                     }
                 }
+                // if filtering by following_id
                 else if (query.following !== undefined){
                     const following = query.following  
                                       
@@ -84,9 +88,8 @@ const addRelationship = async ( req,res, next) => {
         following_id = data.following_id
     }
     // console.log(follower_id)
-    // const data = req.body
-    //TODO: maybe get the current user Id
-    //TODO: does it changes the number of followers for the users?
+    //TODO: get the current user Id to proceed safely
+
 
     try{
         const newData = {
@@ -108,9 +111,6 @@ const addRelationship = async ( req,res, next) => {
     } catch (error) {
         res.status(400).json({"message": error.message});
     }
-
-    // console.log("after the request")
-    // get the number
 }
 
 /**

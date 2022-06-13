@@ -141,6 +141,30 @@ const getUser = async (req, res, next) => {
         if(!data.exists) {
             res.status(404).json({"message":'user with the given ID not found'});
         }else {
+
+            // TODO: adapt in the client the user params 'profile picture' and 'profile cover'
+            // try{
+            //     const user = new User(
+            //         data.id,
+            //         data.data().username,
+            //         data.data().bio, 
+            //         data.data().email, 
+            //         data.data().followers, 
+            //         data.data().following, 
+            //         data.data().password, 
+            //         data.data()["profile cover"], 
+            //         data.data()["profile picture"], 
+            //         data.data()["search history"], 
+            //         data.data().tweezes
+                    
+            //     );
+            //     console.log(user)
+            //     res.json(user)
+            // }
+            // catch (err){
+            //     res.status(400).json({"message": err.message});
+            // }
+
             res.json(data.data());
         }
     } catch (error) {
@@ -148,7 +172,7 @@ const getUser = async (req, res, next) => {
     }
 }
 
-// TODO: allow to only modify the info below
+// TODO: add other fields to modify (e.g. profile picture and cover)
 /**
  * PUT method that updates the user information
  * 
@@ -189,13 +213,6 @@ const updateUser = async (req, res, next) => {
         }
         
 
-        // const user = doc(db,'users',id);
-        // await updateDoc(user, data)
-        //     .then(() => {
-        //         res.json({"message": "user updated"});
-        //     }).catch((error)=>{
-        //         res.status(404).json({"message":'user with the given ID not found'});
-        //     })
     } catch (error) {
         res.status(400).json({"message": error.message});
     }

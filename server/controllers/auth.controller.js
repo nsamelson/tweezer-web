@@ -32,9 +32,7 @@ const signup = async (req, res, next) => {
     }
     // console.log(username,)
 
-    // email = data.email
-    // password = data.password
-    // username = data.username
+
     const id = username
     const usernamesArray = []
 

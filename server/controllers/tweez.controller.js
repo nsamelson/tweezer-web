@@ -53,7 +53,6 @@ const getTweezes = async (req,res,next)=>{
             q = query(tweezesRef)
         }
 
-        // const tweezesRef = collection(db,'tweezes')
         const data = await getDocs(q)
         const tweezesArray = []
         // res.json(data)
