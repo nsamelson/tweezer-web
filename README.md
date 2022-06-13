@@ -90,4 +90,4 @@ Inside, you will find 4 components, that are under the Module ```App``` :
 The first suggested improvement would be to add better and consistent error handling accross the whole application.  
 On the security side, it would be advised to set strict rules in the [Firebase console](https://console.firebase.google.com/u/0/), and also remove redundant and insecure data. Furthermore, each function in the controller should first verify the identity of the user, in case he is unexpectedly disconnected.  
 An other improvement would be to subdivide responses in subsets of 100 items, to improve response speed if there are too many items.  
-Finally a last improvement would be to allow more profile personnalization (e.g. change profile picture, profile cover,..)
+Finally a last improvement would be to allow more profile personnalization (e.g. change profile picture, profile cover,..).
